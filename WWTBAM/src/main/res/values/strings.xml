@@ -3,6 +3,17 @@
 
     <string name="app_name">WWTBAM</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="play">Play</string>
+    <string name="settings">Settings</string>
+    <string name="scores">Scores</string>
+    <string name="about">Credits</string>
+    <string name="main">MAIN</string>
+    <string name="about_text">This app was made for ADM. Sergiu Daniel Marsavela and Patrick Mondria Simoes.</string>
+    <string name="pref_title_help">Number of helps</string>
+    <string name="pref_help_summary">Select how many times you can ask for help.</string>
+    <string name="pref_name_summary">Introduce your name.</string>
+    <string name="pref_name_title">Name</string>
+    <string name="pref_addFriend_title">Add friend</string>
+    <string name="pref_addFriend_summary">Add friends to compare scores.</string>
 
 </resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:key="fragments"
+        android:title="@string/pref_name_title"
+        android:summary="@string/pref_name_summary"/>
+    <ListPreference
+        android:key="graphics"
+        android:title="@string/pref_title_help"
+        android:summary="@string/pref_help_summary"
+        android:entries="@array/numHelps"
+        android:entryValues="@array/numHelpsValues"
+        android:defaultValue="3"/>
+    <EditTextPreference
+        android:key="fragments"
+        android:title="@string/pref_addFriend_title"
+        android:summary="@string/pref_addFriend_summary"/>
+</PreferenceScreen>
