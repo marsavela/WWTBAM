@@ -18,7 +18,6 @@
             android:label="@string/main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -35,7 +34,12 @@
         <activity
             android:name=".Credits"
             android:label="@string/about"
-            android:theme="@android:style/Theme.Holo.Dialog"/>
+            android:theme="@android:style/Theme.Holo.Dialog">
+            <intent-filter>
+                <action android:name="es.serpat.wwtbam.Credits"/>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

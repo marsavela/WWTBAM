@@ -13,7 +13,7 @@
     <string name="pref_help_summary">Select how many times you can ask for help.</string>
     <string name="pref_name_summary">Introduce your name.</string>
     <string name="pref_name_title">Name</string>
-    <string name="pref_addFriend_title">Add friend</string>
-    <string name="pref_addFriend_summary">Add friends to compare scores.</string>
+    <string name="pref_friends_title">Add friend</string>
+    <string name="pref_friends_summary">Add friends to compare scores.</string>
 
 </resources>
