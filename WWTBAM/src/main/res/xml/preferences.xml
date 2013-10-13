@@ -17,7 +17,7 @@
         android:title="@string/pref_friends_title"
         android:summary="@string/pref_friends_summary">
 
-        <intent android:action="es.serpat.wwtbam.Credits" />
+        <intent android:action="es.serpat.wwtbam.Friends" />
 
     </PreferenceScreen>
 </PreferenceScreen>

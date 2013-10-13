@@ -12,22 +12,22 @@
         style="@style/textWWTBAM"/>
 
     <Button
-        android:text="@string/play"
+        android:text="@string/low_play"
         android:id="@+id/butPlay"
         style="@style/button"/>
 
     <Button
-        android:text="@string/settings"
+        android:text="@string/low_settings"
         android:id="@+id/butSettings"
         style="@style/button"/>
 
     <Button
-        android:text="@string/scores"
+        android:text="@string/low_scores"
         android:id="@+id/butScores"
         style="@style/button"/>
 
     <Button
-        android:text="@string/about"
+        android:text="@string/low_about"
         android:id="@+id/butAbout"
         style="@style/button"/>
 
