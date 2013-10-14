@@ -21,7 +21,7 @@
     <string name="friends">FRIENDS</string>
     <string name="action_addFriend">ADD FRIEND</string>
     <string name="users">All users</string>
-    <string name="local">Local</string>
+    <string name="local">LOCAL</string>
     <string name="action_delScores">DELETE</string>
     <string name="delete_scores_confirmation">Are you sure you want to delete the local scores?</string>
     <string name="delete_scores">Delete scores</string>

@@ -5,7 +5,9 @@ import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -20,7 +22,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -91,6 +97,11 @@ public class Scores extends FragmentActivity implements ActionBar.TabListener {
                             .setText(mAppSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -206,14 +217,37 @@ public class Scores extends FragmentActivity implements ActionBar.TabListener {
     /**
      * A fragment that launches other parts of the demo application.
      */
-    public class localScores extends Fragment {
+    public class localScores extends ListFragment {
+
+        private ArrayList<Map<String, String>> buildData() {
+            ArrayList<Map<String, String>> listScores = new ArrayList<Map<String, String>>();
+            listScores.add(putData("Android", "3000"));
+            listScores.add(putData("Windows7", "5000"));
+            listScores.add(putData("iPhone", "65454"));
+            return listScores;
+        }
+
+        private HashMap<String, String> putData(String name, String score) {
+            HashMap<String, String> item = new HashMap<String, String>();
+            item.put("name", name);
+            item.put("score", score);
+            return item;
+        }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.list_scores, container, false);
+            ArrayList<Map<String, String>> list = buildData();
+            String[] from = { "name", "score" };
+            int[] to = { android.R.id.text1, android.R.id.text2 };
+
+            SimpleAdapter adapter = new SimpleAdapter(getApplicationContext(), list,
+                    android.R.layout.simple_list_item_2, from, to);
+            setListAdapter(adapter);
             return rootView;
         }
+
     }
 
     /**
