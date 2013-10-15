@@ -50,8 +50,8 @@ public class MainActivity extends Activity {
     }
 
     private void launchGame(View view) {
-        //Intent i = new Intent(this, Game.class);
-        //startActivity(i);
+        Intent i = new Intent(this, Play.class);
+        startActivity(i);
     }
 
     private void launchPreferences(View view) {

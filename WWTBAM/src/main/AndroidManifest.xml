@@ -21,16 +21,33 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--<activity
-            android:name=".Game"
+        <activity
+            android:name=".Play"
             android:label="@string/play"
-            android:screenOrientation="landscape"/>-->
+            android:parentActivityName="es.serpat.wwtbam.MainActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.serpat.wwtbam.MainActivity" />
+        </activity>
         <activity
             android:name=".SetPreferences"
-            android:label="@string/settings"/>
+            android:label="@string/settings"
+            android:parentActivityName="es.serpat.wwtbam.MainActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.serpat.wwtbam.MainActivity" />
+        </activity>
         <activity
             android:name=".Scores"
-            android:label="@string/scores"/>
+            android:label="@string/scores"
+            android:parentActivityName="es.serpat.wwtbam.MainActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="es.serpat.wwtbam.MainActivity" />
+        </activity>
         <activity
             android:name=".Credits"
             android:label="@string/about"
@@ -38,7 +55,7 @@
         </activity>
         <activity
             android:name=".Friends"
-            android:label="@string/friends">
+            android:label="@string/friends"
             android:parentActivityName="es.serpat.wwtbam.SetPreferences" >
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data

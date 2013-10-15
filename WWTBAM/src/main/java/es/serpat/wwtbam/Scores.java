@@ -4,17 +4,13 @@ import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,11 +18,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,6 +44,8 @@ public class Scores extends FragmentActivity implements ActionBar.TabListener {
      * time.
      */
     ViewPager mViewPager;
+
+    private AlertDialog confirmationDialog;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,11 +93,7 @@ public class Scores extends FragmentActivity implements ActionBar.TabListener {
                             .setText(mAppSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
-    }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -119,20 +111,7 @@ public class Scores extends FragmentActivity implements ActionBar.TabListener {
                 // This is called when the Home (Up) button is pressed in the action bar.
                 // Create a simple intent that starts the hierarchical parent activity and
                 // use NavUtils in the Support Package to ensure proper handling of Up.
-                Intent upIntent = new Intent(this, MainActivity.class);
-                if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
-                    // This activity is not part of the application's task, so create a new task
-                    // with a synthesized back stack.
-                    TaskStackBuilder.from(this)
-                            // If there are ancestor activities, they should be added here.
-                            .addNextIntent(upIntent)
-                            .startActivities();
-                    finish();
-                } else {
-                    // This activity is part of the application's task, so simply
-                    // navigate up to the hierarchical parent activity.
-                    NavUtils.navigateUpTo(this, upIntent);
-                }
+                NavUtils.navigateUpFromSameTask(this);
                 return true;
             case R.id.action_scores:
                 confirmDeletion();
@@ -141,8 +120,8 @@ public class Scores extends FragmentActivity implements ActionBar.TabListener {
         return super.onOptionsItemSelected(item);
     }
 
-    private void confirmDeletion() {
-        new AlertDialog.Builder(this)
+    private void confirmDeletion(){
+        confirmationDialog = new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_delete)
                 .setTitle(getString(R.string.delete_scores))
                 .setMessage(getString(R.string.delete_scores_confirmation))
@@ -192,7 +171,7 @@ public class Scores extends FragmentActivity implements ActionBar.TabListener {
 
                 default:
                     // Show all users
-                    return new allScores();
+                    return new friendsScores();
             }
         }
 
@@ -217,7 +196,7 @@ public class Scores extends FragmentActivity implements ActionBar.TabListener {
     /**
      * A fragment that launches other parts of the demo application.
      */
-    public class localScores extends ListFragment {
+    public static class localScores extends ListFragment {
 
         private ArrayList<Map<String, String>> buildData() {
             ArrayList<Map<String, String>> listScores = new ArrayList<Map<String, String>>();
@@ -235,52 +214,42 @@ public class Scores extends FragmentActivity implements ActionBar.TabListener {
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.list_scores, container, false);
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
             ArrayList<Map<String, String>> list = buildData();
             String[] from = { "name", "score" };
             int[] to = { android.R.id.text1, android.R.id.text2 };
 
-            SimpleAdapter adapter = new SimpleAdapter(getApplicationContext(), list,
+            SimpleAdapter adapter = new SimpleAdapter(getActivity().getBaseContext(), list,
                     android.R.layout.simple_list_item_2, from, to);
             setListAdapter(adapter);
-            return rootView;
-        }
-
-    }
-
-    /**
-     * A fragment that launches other parts of the demo application.
-     */
-    public class allScores extends ListFragment {
-
-        private ArrayList<Map<String, String>> buildData() {
-            ArrayList<Map<String, String>> listScores = new ArrayList<Map<String, String>>();
-            listScores.add(putData("Android", "3000"));
-            listScores.add(putData("Windows7", "5000"));
-            listScores.add(putData("iPhone", "65454"));
-            return listScores;
-        }
-
-        private HashMap<String, String> putData(String name, String score) {
-            HashMap<String, String> item = new HashMap<String, String>();
-            item.put("name", name);
-            item.put("score", score);
-            return item;
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.list_score_friends, container, false);
-            ArrayList<Map<String, String>> list = buildData();
-            String[] from = { "name", "score" };
-            int[] to = { android.R.id.text1, android.R.id.text2 };
+            return rootView;
+        }
 
-            SimpleAdapter adapter = new SimpleAdapter(getApplicationContext(), list,
-                    android.R.layout.simple_list_item_2, from, to);
-            setListAdapter(adapter);
+        @Override
+        public void onListItemClick(ListView l, View v, int position, long id) {
+            super.onListItemClick(l, v, position, id);
+            Toast.makeText(getActivity(), getListView().getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /**
+     * A fragment that launches other parts of the demo application.
+     */
+    public static class friendsScores extends Fragment {
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.list_scores, container, false);
+
             return rootView;
         }
     }

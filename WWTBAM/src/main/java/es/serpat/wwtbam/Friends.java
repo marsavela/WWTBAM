@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.ListFragment;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -15,6 +16,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
 
 /**
  * Created by SergiuDaniel on 13/10/13.
@@ -59,7 +63,7 @@ public class Friends extends FragmentActivity implements ActionBar.TabListener {
 
         // Set up the ViewPager, attaching the adapter and setting up a listener for when the
         // user swipes between sections.
-        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager = (ViewPager) findViewById(R.id.friends);
         mViewPager.setAdapter(mAppSectionsPagerAdapter);
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
@@ -134,11 +138,11 @@ public class Friends extends FragmentActivity implements ActionBar.TabListener {
                 case 0:
                     // The first section of the app is the most interesting -- it offers
                     // a launchpad into the other demonstrations in this example application.
-                    return new FriendsIHave();
+                    return new friendsIHave();
 
                 default:
                     // Show all users
-                    return new AllUsers();
+                    return new allUsers();
             }
         }
 
@@ -163,29 +167,67 @@ public class Friends extends FragmentActivity implements ActionBar.TabListener {
     /**
      * A fragment that launches other parts of the demo application.
      */
-    public static class FriendsIHave extends Fragment {
+    public static class friendsIHave extends ListFragment {
+
+        String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
+                "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
+                "Linux", "OS/2" };
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getBaseContext(),
+                    android.R.layout.simple_list_item_1, values);
+            setListAdapter(adapter);
+        }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.list_friends, container, false);
-
             return rootView;
         }
+
+        @Override
+        public void onListItemClick(ListView l, View v, int position, long id) {
+            super.onListItemClick(l, v, position, id);
+            Toast.makeText(getActivity(), getListView().getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
+        }
+
     }
 
     /**
      * A fragment that launches other parts of the demo application.
      */
-    public static class AllUsers extends Fragment {
+    public static class allUsers extends ListFragment {
+
+        String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
+                "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
+                "Linux", "OS/2" };
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getBaseContext(),
+                    android.R.layout.simple_list_item_1, values);
+            setListAdapter(adapter);
+        }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.list_friends, container, false);
-
             return rootView;
         }
+
+        @Override
+        public void onListItemClick(ListView l, View v, int position, long id) {
+            super.onListItemClick(l, v, position, id);
+            Toast.makeText(getActivity(), getListView().getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
+        }
+
     }
 
 }
