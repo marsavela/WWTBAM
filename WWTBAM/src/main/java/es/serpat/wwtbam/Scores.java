@@ -45,7 +45,7 @@ public class Scores extends FragmentActivity implements ActionBar.TabListener {
      */
     ViewPager mViewPager;
 
-    private AlertDialog confirmationDialog;
+    //private AlertDialog confirmationDialog;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +60,9 @@ public class Scores extends FragmentActivity implements ActionBar.TabListener {
 
         // Specify that the Home button should show an "Up" caret, indicating that touching the
         // button will take the user one step up in the application's hierarchy.
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         // Specify that the Home/Up button should not be enabled, since there is no hierarchical
         // parent.
@@ -121,7 +123,7 @@ public class Scores extends FragmentActivity implements ActionBar.TabListener {
     }
 
     private void confirmDeletion(){
-        confirmationDialog = new AlertDialog.Builder(this)
+         new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_delete)
                 .setTitle(getString(R.string.delete_scores))
                 .setMessage(getString(R.string.delete_scores_confirmation))
@@ -229,8 +231,7 @@ public class Scores extends FragmentActivity implements ActionBar.TabListener {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.list_score_friends, container, false);
-            return rootView;
+            return inflater.inflate(R.layout.list_score_friends, container, false);
         }
 
         @Override
@@ -248,9 +249,7 @@ public class Scores extends FragmentActivity implements ActionBar.TabListener {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.list_scores, container, false);
-
-            return rootView;
+            return inflater.inflate(R.layout.list_scores, container, false);
         }
     }
 

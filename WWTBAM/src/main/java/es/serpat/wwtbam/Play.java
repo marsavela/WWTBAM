@@ -27,10 +27,7 @@ import java.util.List;
  */
 public class Play extends Activity {
 
-    Game game;
-    Integer actualQuestion;
-    Integer timesHelped;
-    SharedPreferences preferences;
+    private Game game;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,54 +42,11 @@ public class Play extends Activity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         game = new Game(this);
-        preferences = this.getSharedPreferences("es.serpat.wwtbam_preferences", Context.MODE_PRIVATE);
 
-        Initialization();
-        drawActualQuestion(actualQuestion);
-    }
-
-    private void Initialization() {
-        actualQuestion = 0;
-        timesHelped = 0;
-
-        game.setHelp_audience(true);
-        game.setHelp_fifty(true);
-        game.setHelp_phone(true);
-
-        Button buttonA = (Button) findViewById(R.id.butA);
-        buttonA.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                animationOut();
-                actualQuestion++;
-                drawActualQuestion(actualQuestion);
-            }
-        });
-        Button buttonB = (Button) findViewById(R.id.butB);
-        buttonB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                actualQuestion++;
-                drawActualQuestion(actualQuestion);
-            }
-        });
-        Button buttonC = (Button) findViewById(R.id.butC);
-        buttonC.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                actualQuestion++;
-                drawActualQuestion(actualQuestion);
-            }
-        });
-        Button buttonD = (Button) findViewById(R.id.butD);
-        buttonD.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                actualQuestion++;
-                drawActualQuestion(actualQuestion);
-            }
-        });
-
+        if (game.initialComprobations()) {
+            Initialization();
+            drawActualQuestion();
+        }
     }
 
     private void animationOut() {
@@ -149,11 +103,41 @@ public class Play extends Activity {
         buttonD.startAnimation(in);
     }
 
-    private void drawActualQuestion(Integer actualQuestion) {
-        if (actualQuestion>=game.getQuestionList().size()) {
-            animationOut();
-        } else {
-            Question q = game.returnQuestion(actualQuestion);
+    private void Initialization() {
+
+        Button buttonA = (Button) findViewById(R.id.butA);
+        buttonA.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                game.testAnswer("1");
+            }
+        });
+        Button buttonB = (Button) findViewById(R.id.butB);
+        buttonB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                game.testAnswer("2");
+            }
+        });
+        Button buttonC = (Button) findViewById(R.id.butC);
+        buttonC.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                game.testAnswer("3");
+            }
+        });
+        Button buttonD = (Button) findViewById(R.id.butD);
+        buttonD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                game.testAnswer("4");
+            }
+        });
+
+    }
+
+    private void drawActualQuestion() {
+            Question q = game.getQuestionList().get(game.getActualQuestion());
 
             TextView textQuestion = (TextView) findViewById(R.id.question);
             textQuestion.setText(q.getText());
@@ -169,7 +153,16 @@ public class Play extends Activity {
             Button buttonD = (Button) findViewById(R.id.butD);
             buttonD.setText(q.answer4);
 
-        }
+        // Enable and display all buttons if they had been disabled for the Fifty joker
+        buttonA.setEnabled(true);
+        buttonB.setEnabled(true);
+        buttonC.setEnabled(true);
+        buttonD.setEnabled(true);
+        buttonA.setVisibility(View.VISIBLE);
+        buttonB.setVisibility(View.VISIBLE);
+        buttonC.setVisibility(View.VISIBLE);
+        buttonD.setVisibility(View.VISIBLE);
+
     }
 
     @Override
@@ -189,9 +182,9 @@ public class Play extends Activity {
                 // use NavUtils in the Support Package to ensure proper handling of Up.
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
-            case R.id.action_play_help:
-                if(timesHelped<Integer.parseInt(preferences.getString("numberHelps","NULL"))) {
-                    showHelpers();
+            case R.id.action_play_joker:
+                if(game.areJokersLeft()) {
+                    showJoker();
                 } else {
                     showAlert();
                 }
@@ -209,28 +202,12 @@ public class Play extends Activity {
                 .show();
     }
 
-    private void showHelpers() {
-        String[] helpers = getResources().getStringArray(R.array.helpers_array);
-        final List<String> list =  new ArrayList<String>();
-        Collections.addAll(list, helpers);
-        list.remove(1);
-        helpers = list.toArray(new String[list.size()]);
-        /*if(!game.isHelp_phone())
-            helpers[0] = null;
-        //if(!game.isHelp_fifty())
-            helpers[1] = null;
-        if(!game.isHelp_audience())
-            helpers[2] = null;*/
-        ArrayAdapter<String> adapter;
-        /* Assign the name array to that adapter and
-        also choose a simple layout for the list items */
-        adapter = new ArrayAdapter<String>(
-                this,
-                android.R.layout.simple_list_item_1,
-                helpers);
-
-        new AlertDialog.Builder(this).setTitle(R.string.pick_helper)
-                .setAdapter(adapter, new DialogInterface.OnClickListener() {
+    private void showJoker() {
+        new AlertDialog.Builder(this).setTitle(R.string.pick_joker)
+                .setAdapter(new ArrayAdapter<String>(
+                        this,
+                        android.R.layout.simple_list_item_1,
+                        game.getAllowedJokers()), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // The 'which' argument contains the index position
                         // of the selected item
@@ -238,5 +215,43 @@ public class Play extends Activity {
                 }).show();
     }
 
+    public void questionAnswered(String s) {
+        if (s.equals("win")) {
+            new AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_delete)
+                    .setTitle(getString(R.string.delete_scores))
+                    .setMessage(getString(R.string.delete_scores_confirmation))
+                    .show();
+        } else if (s.equals("right")) {
+            new AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_delete)
+                    .setTitle(getString(R.string.delete_scores))
+                    .setMessage(getString(R.string.delete_scores_confirmation))
+                    .setPositiveButton(getString(R.string.next), new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //finish();
+                            drawActualQuestion();
+                        }
+
+                    })
+                    .setNegativeButton(getString(R.string.give_up), new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            drawActualQuestion();
+                        }
+
+                    })
+                    .show();
+        } else if (s.equals("wrong")) {
+            new AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_delete)
+                    .setTitle(getString(R.string.you_lost))
+                    .setMessage(getString(R.string.try_again))
+                    .show();
+        }
+    }
 
 }

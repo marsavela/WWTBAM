@@ -27,8 +27,17 @@
     <string name="delete_scores">Delete scores</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
-    <string name="action_help">HELP</string>
+    <string name="action_help">JOKERS</string>
     <string name="action_end_game">END GAME</string>
-    <string name="pick_helper">Pick a help</string>
+    <string name="pick_joker">Pick a joker</string>
+    <string name="next">Next</string>
+    <string name="give_up">Give Up</string>
+    <string name="you_lost">You lost</string>
+    <string name="try_again">Try again. We know you can do it.</string>
+    <string name="audience">Audience</string>
+    <string name="phone">Phone</string>
+    <string name="fifty">Fifty - Fifty</string>
+    <string name="preferences_file">es.serpat.wwtbam_preferences</string>
+    <string name="default_user_name">Unknown Player</string>
 
 </resources>

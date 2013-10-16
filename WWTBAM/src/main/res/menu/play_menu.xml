@@ -2,7 +2,7 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Helps, should appear as action button -->
-    <item android:id="@+id/action_play_help"
+    <item android:id="@+id/action_play_joker"
         android:title="@string/action_help"
         android:showAsAction="always" />
     <!-- End Game -->

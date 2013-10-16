@@ -185,8 +185,7 @@ public class Friends extends FragmentActivity implements ActionBar.TabListener {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.list_friends, container, false);
-            return rootView;
+            return inflater.inflate(R.layout.list_friends, container, false);
         }
 
         @Override
@@ -218,8 +217,7 @@ public class Friends extends FragmentActivity implements ActionBar.TabListener {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.list_friends, container, false);
-            return rootView;
+            return inflater.inflate(R.layout.list_friends, container, false);
         }
 
         @Override

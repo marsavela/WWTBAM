@@ -1,6 +1,10 @@
 package es.serpat.wwtbam;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,33 +14,73 @@ import java.util.List;
  */
 public class Game extends FragmentActivity {
 
-    private List<Question> questionList;
-    private boolean help_phone;
-    private boolean help_audience;
-    private boolean help_fifty;
+    private List<Question> questionList = generateQuestionList();
+    private int actualQuestion =0;
 
-    Play activity;
+    private boolean	isUsedAudienceJoker = false;
+    private boolean	isUsedFiftyJoker = false;
+    private boolean	isUsedPhoneJoker = false;
+
+    private SharedPreferences preferences;
+
+
+    private String playerName = null;
+
+    private Play activity;
+
+    private int listLevels[] = { 0, 100, 200, 300, 500, 1000, 2000, 4000, 8000,
+            16000, 32000, 64000, 125000, 250000, 500000, 1000000};
 
     public Game(Play activity) {
         this.activity = activity;
 
-        help_audience = true;
-        help_fifty = false;
-        help_phone = true;
+        preferences =  activity.getSharedPreferences(activity.getResources().getString(R.string.preferences_file),
+                Activity.MODE_PRIVATE);
 
-        questionList = generateQuestionList();
     }
 
-    public int availableHelps() {
-        int helps = 0;
-        if(help_audience) helps++;
-        if(help_fifty) helps++;
-        if(help_phone) helps++;
-        return helps;
+    public boolean initialComprobations() {
+        playerName = preferences.getString("playerName","NULL");
+        if (playerName.equals("") || playerName == null) {
+            playerName = activity.getResources().getString(R.string.default_user_name);
+        }
+        return true;
     }
 
-    public Question returnQuestion(int q) {
-        return questionList.get(q);
+    /**
+     * Test if the given answer is the right answer or not and according to the answer and game level, display a different dialog in the PlayActivity
+     * @param answer, the answer chosen by the player
+     */
+    public void testAnswer(String answer) {
+        if (answer.equals(questionList.get(actualQuestion).right)) {
+            if (actualQuestion == questionList.size()-1) {
+                activity.questionAnswered("win");
+            } else {
+                actualQuestion++;
+                activity.questionAnswered("right");
+            }
+        } else {
+            activity.questionAnswered("wrong");
+        }
+    }
+
+    public String[] getAllowedJokers() {
+
+        List<String> list = new ArrayList<String>();
+
+        if (!isUsedAudienceJoker)
+            list.add(activity.getResources().getString(R.string.audience));
+        if (!isUsedAudienceJoker)
+            list.add(activity.getResources().getString(R.string.fifty));
+        if (!isUsedAudienceJoker)
+            list.add(activity.getResources().getString(R.string.phone));
+
+        String[] str = new String[list.size()];
+        return list.toArray(str);
+    }
+
+    public boolean areJokersLeft() {
+        return 3-getAllowedJokers().length < Integer.parseInt(preferences.getString("numberHelps","NULL"));
     }
 
     public List<Question> getQuestionList() {
@@ -47,33 +91,65 @@ public class Game extends FragmentActivity {
         this.questionList = questionList;
     }
 
-    public boolean isHelp_phone() {
-        return help_phone;
+    public int getActualQuestion() {
+        return actualQuestion;
     }
 
-    public void setHelp_phone(boolean help_phone) {
-        this.help_phone = help_phone;
+    public void setActualQuestion(int actualQuestion) {
+        this.actualQuestion = actualQuestion;
     }
 
-    public boolean isHelp_audience() {
-        return help_audience;
+    public boolean isUsedAudienceJoker() {
+        return isUsedAudienceJoker;
     }
 
-    public void setHelp_audience(boolean help_audience) {
-        this.help_audience = help_audience;
+    public void setUsedAudienceJoker(boolean usedAudienceJoker) {
+        isUsedAudienceJoker = usedAudienceJoker;
     }
 
-    public boolean isHelp_fifty() {
-        return help_fifty;
+    public boolean isUsedFiftyJoker() {
+        return isUsedFiftyJoker;
     }
 
-    public void setHelp_fifty(boolean help_fifty) {
-        this.help_fifty = help_fifty;
+    public void setUsedFiftyJoker(boolean usedFiftyJoker) {
+        isUsedFiftyJoker = usedFiftyJoker;
+    }
+
+    public boolean isUsedPhoneJoker() {
+        return isUsedPhoneJoker;
+    }
+
+    public void setUsedPhoneJoker(boolean usedPhoneJoker) {
+        isUsedPhoneJoker = usedPhoneJoker;
+    }
+
+    public String getPlayerName() {
+        return playerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
+    }
+
+    public Play getActivity() {
+        return activity;
+    }
+
+    public void setActivity(Play activity) {
+        this.activity = activity;
+    }
+
+    public int[] getListLevels() {
+        return listLevels;
+    }
+
+    public void setListLevels(int[] listLevels) {
+        this.listLevels = listLevels;
     }
 
     public List<Question> generateQuestionList() {
         List<Question> list = new ArrayList<Question>();
-        Question q = null;
+        Question q;
 
         q = new Question(
                 "1",
@@ -152,7 +228,7 @@ public class Game extends FragmentActivity {
 
         q = new Question(
                 "6",
-                "Who was the third James Bond actor in the MGM films? (Do not include &apos;Casino Royale&apos;.)",
+                "Who was the third James Bond actor in the MGM films? (Do not include Casino Royale.)",
                 "Roger Moore",
                 "Pierce Brosnan",
                 "Timothy Dalton",
