@@ -29,5 +29,6 @@
     <string name="yes">Yes</string>
     <string name="action_help">HELP</string>
     <string name="action_end_game">END GAME</string>
+    <string name="pick_helper">Pick a help</string>
 
 </resources>

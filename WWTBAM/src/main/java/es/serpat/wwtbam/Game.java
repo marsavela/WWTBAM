@@ -10,13 +10,65 @@ import java.util.List;
  */
 public class Game extends FragmentActivity {
 
-    private List<Question> questionList = generateQuestionList();
+    private List<Question> questionList;
     private boolean help_phone;
     private boolean help_audience;
     private boolean help_fifty;
 
-    public Game() {
+    Play activity;
 
+    public Game(Play activity) {
+        this.activity = activity;
+
+        help_audience = true;
+        help_fifty = false;
+        help_phone = true;
+
+        questionList = generateQuestionList();
+    }
+
+    public int availableHelps() {
+        int helps = 0;
+        if(help_audience) helps++;
+        if(help_fifty) helps++;
+        if(help_phone) helps++;
+        return helps;
+    }
+
+    public Question returnQuestion(int q) {
+        return questionList.get(q);
+    }
+
+    public List<Question> getQuestionList() {
+        return questionList;
+    }
+
+    public void setQuestionList(List<Question> questionList) {
+        this.questionList = questionList;
+    }
+
+    public boolean isHelp_phone() {
+        return help_phone;
+    }
+
+    public void setHelp_phone(boolean help_phone) {
+        this.help_phone = help_phone;
+    }
+
+    public boolean isHelp_audience() {
+        return help_audience;
+    }
+
+    public void setHelp_audience(boolean help_audience) {
+        this.help_audience = help_audience;
+    }
+
+    public boolean isHelp_fifty() {
+        return help_fifty;
+    }
+
+    public void setHelp_fifty(boolean help_fifty) {
+        this.help_fifty = help_fifty;
     }
 
     public List<Question> generateQuestionList() {
