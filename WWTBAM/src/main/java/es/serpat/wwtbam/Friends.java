@@ -169,9 +169,9 @@ public class Friends extends FragmentActivity implements ActionBar.TabListener {
      */
     public static class friendsIHave extends ListFragment {
 
-        String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
+        String[] values = new String[]{"Android", "iPhone", "WindowsMobile",
                 "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-                "Linux", "OS/2" };
+                "Linux", "OS/2"};
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -201,9 +201,9 @@ public class Friends extends FragmentActivity implements ActionBar.TabListener {
      */
     public static class allUsers extends ListFragment {
 
-        String[] values = new String[] { "Android", "iPhone", "WindowsMobile",
+        String[] values = new String[]{"Android", "iPhone", "WindowsMobile",
                 "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-                "Linux", "OS/2" };
+                "Linux", "OS/2"};
 
         @Override
         public void onCreate(Bundle savedInstanceState) {

@@ -122,13 +122,12 @@ public class Scores extends FragmentActivity implements ActionBar.TabListener {
         return super.onOptionsItemSelected(item);
     }
 
-    private void confirmDeletion(){
-         new AlertDialog.Builder(this)
+    private void confirmDeletion() {
+        new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_delete)
                 .setTitle(getString(R.string.delete_scores))
                 .setMessage(getString(R.string.delete_scores_confirmation))
-                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener()
-                {
+                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //finish();
@@ -220,8 +219,8 @@ public class Scores extends FragmentActivity implements ActionBar.TabListener {
             super.onCreate(savedInstanceState);
 
             ArrayList<Map<String, String>> list = buildData();
-            String[] from = { "name", "score" };
-            int[] to = { android.R.id.text1, android.R.id.text2 };
+            String[] from = {"name", "score"};
+            int[] to = {android.R.id.text1, android.R.id.text2};
 
             SimpleAdapter adapter = new SimpleAdapter(getActivity().getBaseContext(), list,
                     android.R.layout.simple_list_item_2, from, to);

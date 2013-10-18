@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -41,9 +40,7 @@ public class Play extends Activity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         game = new Game(this);
-
         preferences = this.getSharedPreferences(getResources().getString(R.string.pref_file), Context.MODE_PRIVATE);
-
 
         if (game.isGameSaved())
             game.restoreGameData();
@@ -70,14 +67,15 @@ public class Play extends Activity {
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
             case R.id.action_play_joker:
-                if(game.areJokersLeft()) {
+                if (game.areJokersLeft()) {
                     showAvailableJokers();
                 } else {
                     showAlertNoAvailableJokers();
                 }
                 return true;
             case R.id.action_play_end_game:
-                game.finishGame(game.getListLevels()[game.getActualQuestion()]);
+                game.setUnsaveGame();
+                finish();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -92,26 +90,20 @@ public class Play extends Activity {
         else
             reDrawActualQuestion();
 
-        if (game.isUsedFiftyJoker() && game.getQuestionFiftyJokerWereUsed()==game.getActualQuestion()) {
+        if (game.isUsedFiftyJoker() && game.getQuestionFiftyJokerWereUsed() == game.getActualQuestion()) {
             reHideButton(game.numToLetter(game.getQuestionList().get(game.getActualQuestion()).fifty1));
             reHideButton(game.numToLetter(game.getQuestionList().get(game.getActualQuestion()).fifty2));
-            //game.askForJoker(getResources().getString(R.string.fifty));
         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Log.w("PAUSA","Guardando juego");
-        //if (game.toSaveOrNotToSave())
-            game.saveGameData();
-        /*else
-            game.deleteSavedGame();*/
+        game.saveGameData();
     }
 
     private void animationIn() {
-        Animation in = AnimationUtils.loadAnimation(this,
-                R.anim.fade_in);
+        Animation in = AnimationUtils.loadAnimation(this, R.anim.fade_in);
 
         Button buttonA = (Button) findViewById(R.id.butA);
         Button buttonB = (Button) findViewById(R.id.butB);
@@ -170,29 +162,30 @@ public class Play extends Activity {
     }
 
     private void drawActualQuestion() {
-        Log.v("DRAWING", "ActualQuestion: " + Integer.toString(game.getActualQuestion()));
-
         animationIn();
         reDrawActualQuestion();
-
     }
 
     private void reDrawActualQuestion() {
         Question q = game.getQuestionList().get(game.getActualQuestion());
-
         TextView textQuestion = (TextView) findViewById(R.id.question);
+        TextView a = (TextView) findViewById(R.id.textA);
+        TextView b = (TextView) findViewById(R.id.textB);
+        TextView c = (TextView) findViewById(R.id.textC);
+        TextView d = (TextView) findViewById(R.id.textD);
+        Button buttonA = (Button) findViewById(R.id.butA);
+        Button buttonB = (Button) findViewById(R.id.butB);
+        Button buttonC = (Button) findViewById(R.id.butC);
+        Button buttonD = (Button) findViewById(R.id.butD);
+
         textQuestion.setText(q.getText());
 
-        Button buttonA = (Button) findViewById(R.id.butA);
         buttonA.setText(q.answer1);
-        Button buttonB = (Button) findViewById(R.id.butB);
         buttonB.setText(q.answer2);
-        Button buttonC = (Button) findViewById(R.id.butC);
         buttonC.setText(q.answer3);
-        Button buttonD = (Button) findViewById(R.id.butD);
         buttonD.setText(q.answer4);
 
-        // Enable and display all buttons if they had been disabled for the Fifty joker
+        // Enable and display all buttons and text if they had been disabled for the Fifty joker
         buttonA.setEnabled(true);
         buttonB.setEnabled(true);
         buttonC.setEnabled(true);
@@ -201,6 +194,10 @@ public class Play extends Activity {
         buttonB.setVisibility(View.VISIBLE);
         buttonC.setVisibility(View.VISIBLE);
         buttonD.setVisibility(View.VISIBLE);
+        a.setVisibility(View.VISIBLE);
+        b.setVisibility(View.VISIBLE);
+        c.setVisibility(View.VISIBLE);
+        d.setVisibility(View.VISIBLE);
     }
 
     private void showAlertNoAvailableJokers() {
@@ -211,8 +208,9 @@ public class Play extends Activity {
                 .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        // The 'which' argument contains the index position
+                        // of the selected item
                     }
-
                 })
                 .show();
     }
@@ -226,7 +224,6 @@ public class Play extends Activity {
                     public void onClick(DialogInterface dialog, int which) {
                         // The 'which' argument contains the index position
                         // of the selected item
-                        Log.w("APRETADO",Integer.toString(which));
                         game.askForJoker(game.getJokerName(which));
                     }
                 }).show();
@@ -242,7 +239,8 @@ public class Play extends Activity {
                     .setNeutralButton(getString(R.string.finish), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            game.finishGame(game.getListLevels()[game.getActualQuestion()]);
+                            game.setUnsaveGame();
+                            finish();
                         }
 
                     })
@@ -253,19 +251,18 @@ public class Play extends Activity {
                     .setCancelable(false)
                     .setTitle(getString(R.string.right))
                     .setMessage(getString(R.string.right_message))
-                    .setPositiveButton(getString(R.string.next), new DialogInterface.OnClickListener()
-                    {
+                    .setPositiveButton(getString(R.string.next), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             drawActualQuestion();
                         }
 
                     })
-                    .setNegativeButton(getString(R.string.give_up), new DialogInterface.OnClickListener()
-                    {
+                    .setNegativeButton(getString(R.string.give_up), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            game.giveUpGame();
+                            game.setUnsaveGame();
+                            finish();
                         }
 
                     })
@@ -276,11 +273,11 @@ public class Play extends Activity {
                     .setCancelable(false)
                     .setTitle(getString(R.string.you_lost))
                     .setMessage(getString(R.string.try_again))
-                    .setNeutralButton(getString(R.string.understood),new DialogInterface.OnClickListener()
-                    {
+                    .setNeutralButton(getString(R.string.understood), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            game.wrongAnswered();
+                            game.setUnsaveGame();
+                            finish();
                         }
 
                     })
@@ -291,12 +288,10 @@ public class Play extends Activity {
     /**
      * Called by the game class to hide a false answer when the 50/50 joker is used
      *
-     * @param id
-     *            , the number of the button to hide
+     * @param id , the number of the button to hide
      */
     public void hideButton(String id) {
-        Animation out = AnimationUtils.loadAnimation(this,
-                R.anim.fade_out);
+        Animation out = AnimationUtils.loadAnimation(this,R.anim.fade_out);
 
         Button button = reHideButton(id);
         TextView text = (TextView) findViewById(getResources().getIdentifier("text" + id, "id",

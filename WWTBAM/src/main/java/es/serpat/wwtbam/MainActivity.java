@@ -17,21 +17,21 @@ public class MainActivity extends Activity {
         bPlay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                launchGame(null);
+                launchGame();
             }
         });
         Button bPreferences = (Button) findViewById(R.id.butSettings);
         bPreferences.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                launchPreferences(null);
+                launchPreferences();
             }
         });
         Button bScores = (Button) findViewById(R.id.butScores);
         bScores.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                launchScores(null);
+                launchScores();
             }
         });
         Button bAbout = (Button) findViewById(R.id.butAbout);
@@ -39,29 +39,29 @@ public class MainActivity extends Activity {
 
             @Override
             public void onClick(View view) {
-                launchAbout(null);
+                launchAbout();
             }
         });
     }
 
-    private void launchScores(View view) {
+    private void launchScores() {
         Intent i = new Intent(this, Scores.class);
         startActivity(i);
     }
 
-    private void launchGame(View view) {
+    private void launchGame() {
         Intent i = new Intent(this, Play.class);
         startActivity(i);
     }
 
-    private void launchPreferences(View view) {
+    private void launchPreferences() {
         Intent i = new Intent(this, SetPreferences.class);
         startActivity(i);
     }
 
-    public void launchAbout(View view) {
+    public void launchAbout() {
         Intent i = new Intent(this, Credits.class);
         startActivity(i);
     }
-    
+
 }

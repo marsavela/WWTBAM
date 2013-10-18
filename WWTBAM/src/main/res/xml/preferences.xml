@@ -4,14 +4,14 @@
     <EditTextPreference
         android:key="playerName"
         android:title="@string/pref_name_title"
-        android:summary="@string/pref_name_summary"/>
+        android:summary="@string/pref_name_summary" />
     <ListPreference
         android:key="numberJokers"
         android:title="@string/pref_title_help"
         android:summary="@string/pref_help_summary"
         android:entries="@array/numHelps"
         android:entryValues="@array/numHelpsValues"
-        android:defaultValue="3"/>
+        android:defaultValue="3" />
     <PreferenceScreen
         android:key="addFriends"
         android:title="@string/pref_friends_title"
