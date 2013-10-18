@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -28,14 +27,6 @@ public class Play extends Activity {
     private Game game;
 
     SharedPreferences preferences;
-
-    //Constants for saved data.
-    private String              SHARED_PREF_QUESTION_NUMBER    = "questionNumber";
-    private String              SHARED_PREF_NAME_KEY           = "playerName";
-    private String              SHARED_PREF_AUDIENCE           = "isUsedAudienceJoker";
-    private String              SHARED_PREF_FIFTY_USED         = "questionFiftyJokerWereUsed";
-    private String              SHARED_PREF_FIFTY              = "isUsedFiftyJoker";
-    private String              SHARED_PREF_PHONE              = "isUsedPhoneJoker";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +76,8 @@ public class Play extends Activity {
                     showAlertNoAvailableJokers();
                 }
                 return true;
+            case R.id.action_play_end_game:
+                game.finishGame(game.getListLevels()[game.getActualQuestion()]);
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -94,9 +87,10 @@ public class Play extends Activity {
     protected void onResume() {
         super.onResume();
 
-
-        reDrawActualQuestion();
-
+        if (game.getActualQuestion() == 0 && !game.isGameSaved())
+            drawActualQuestion();
+        else
+            reDrawActualQuestion();
 
         if (game.isUsedFiftyJoker() && game.getQuestionFiftyJokerWereUsed()==game.getActualQuestion()) {
             reHideButton(game.numToLetter(game.getQuestionList().get(game.getActualQuestion()).fifty1));
@@ -106,74 +100,13 @@ public class Play extends Activity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Log.v("STOPPING", "Inside of onSaveInstanceState");
-
-        if (game.getActualQuestion()<game.getQuestionList().size())
+    protected void onPause() {
+        super.onPause();
+        Log.w("PAUSA","Guardando juego");
+        //if (game.toSaveOrNotToSave())
             game.saveGameData();
-/*
-        outState.putBoolean(SHARED_PREF_GAME, true);
-        outState.putInt(SHARED_PREF_QUESTION_NUMBER, game.getActualQuestion());
-        outState.putString(SHARED_PREF_NAME_KEY, game.getPlayerName());
-        outState.putBoolean(SHARED_PREF_PHONE, game.isUsedPhoneJoker());
-        outState.putBoolean(SHARED_PREF_FIFTY, game.isUsedFiftyJoker());
-        outState.putInt(SHARED_PREF_FIFTY_USED, game.getQuestionFiftyJokerWereUsed());
-        outState.putBoolean(SHARED_PREF_AUDIENCE, game.isUsedAudienceJoker());*/
-        Log.v("STOPPING", "ActualQuestion: " + Integer.toString(game.getActualQuestion()));
-
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        Log.v("STARTING", "Inside of onRestoreInstanceState");
-
-        Log.v("STARTING", "ActualQuestion: " + Integer.toString(game.getActualQuestion()));
-        //isGameSaved = preferences.getBoolean(SHARED_PREF_GAME, false);
-        Log.w("STARTING AGAIN", Boolean.toString(game.isGameSaved()));
-
-        /*game.setActualQuestion(savedInstanceState.getInt(SHARED_PREF_QUESTION_NUMBER));
-        game.setPlayerName(savedInstanceState.getString(SHARED_PREF_NAME_KEY));
-        game.setUsedPhoneJoker(savedInstanceState.getBoolean(SHARED_PREF_PHONE));
-        game.setUsedFiftyJoker(savedInstanceState.getBoolean(SHARED_PREF_FIFTY));
-        game.setQuestionFiftyJokerWereUsed(savedInstanceState.getInt(SHARED_PREF_FIFTY_USED));
-        game.setUsedAudienceJoker(savedInstanceState.getBoolean(SHARED_PREF_AUDIENCE));*/
-        Log.v("STARTING", "ActualQuestion: " + Integer.toString(game.getActualQuestion()));
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.v("DESTROYYY", "ActualQuestion: " + Integer.toString(game.getActualQuestion()));
-        Log.w("DESTROYYYY", Boolean.toString(game.isGameSaved()));
-    }
-
-    private void animationOut() {
-        Animation out = AnimationUtils.loadAnimation(this,
-                R.anim.fade_out);
-
-        Button buttonA = (Button) findViewById(R.id.butA);
-        Button buttonB = (Button) findViewById(R.id.butB);
-        Button buttonC = (Button) findViewById(R.id.butC);
-        Button buttonD = (Button) findViewById(R.id.butD);
-
-        TextView question = (TextView) findViewById(R.id.question);
-        TextView a = (TextView) findViewById(R.id.textA);
-        TextView b = (TextView) findViewById(R.id.textB);
-        TextView c = (TextView) findViewById(R.id.textC);
-        TextView d = (TextView) findViewById(R.id.textD);
-
-        question.startAnimation(out);
-        a.startAnimation(out);
-        b.startAnimation(out);
-        c.startAnimation(out);
-        d.startAnimation(out);
-
-        buttonA.startAnimation(out);
-        buttonB.startAnimation(out);
-        buttonC.startAnimation(out);
-        buttonD.startAnimation(out);
+        /*else
+            game.deleteSavedGame();*/
     }
 
     private void animationIn() {
@@ -303,8 +236,16 @@ public class Play extends Activity {
         if (s.equals("win")) {
             new AlertDialog.Builder(this)
                     .setIcon(android.R.drawable.star_on)
+                    .setCancelable(false)
                     .setTitle(getString(R.string.congratulations))
                     .setMessage(getString(R.string.congratulations_message))
+                    .setNeutralButton(getString(R.string.finish), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            game.finishGame(game.getListLevels()[game.getActualQuestion()]);
+                        }
+
+                    })
                     .show();
         } else if (s.equals("right")) {
             new AlertDialog.Builder(this)
@@ -324,7 +265,7 @@ public class Play extends Activity {
                     {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            drawActualQuestion();
+                            game.giveUpGame();
                         }
 
                     })
@@ -332,8 +273,17 @@ public class Play extends Activity {
         } else if (s.equals("wrong")) {
             new AlertDialog.Builder(this)
                     .setIcon(android.R.drawable.ic_delete)
+                    .setCancelable(false)
                     .setTitle(getString(R.string.you_lost))
                     .setMessage(getString(R.string.try_again))
+                    .setNeutralButton(getString(R.string.understood),new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            game.wrongAnswered();
+                        }
+
+                    })
                     .show();
         }
     }

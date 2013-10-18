@@ -2,7 +2,6 @@ package es.serpat.wwtbam;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
@@ -38,6 +37,7 @@ public class Game extends FragmentActivity {
     private Play activity;
 
     private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
 
     private int listLevels[] = { 0, 100, 200, 300, 500, 1000, 2000, 4000, 8000,
             16000, 32000, 64000, 125000, 250000, 500000, 1000000};
@@ -46,6 +46,7 @@ public class Game extends FragmentActivity {
         this.activity = activity;
 
         preferences = activity.getSharedPreferences(activity.getResources().getString(R.string.pref_file), Context.MODE_PRIVATE);
+        editor = preferences.edit();
 
         /*//numberOfJokers = preferences.getInt("previousJokers", 3);
         playerName = preferences.getString("playerName", "NULL").trim();
@@ -58,6 +59,11 @@ public class Game extends FragmentActivity {
 
         if (questionList == null)
             questionList = generateQuestionList();
+
+        isGameSaved = preferences.getBoolean(SHARED_PREF_GAME,false);
+
+        editor.putBoolean(SHARED_PREF_GAME,true);
+        editor.commit();
 
     }
 
@@ -102,6 +108,23 @@ public class Game extends FragmentActivity {
         }
     }
 
+    public void wrongAnswered() {
+        if (actualQuestion >= 9) {
+            finishGame(listLevels[10]);
+        } else if (actualQuestion >= 4) {
+            finishGame(listLevels[5]);
+        } else finishGame(0);
+    }
+
+    public void finishGame(int score) {
+        //TODO Fallas y cierras la aplicación te deja volver a contestar la misma pregunta.
+        editor.putBoolean(SHARED_PREF_GAME,false);
+        editor.commit();
+
+        activity.finish();
+        Log.w("SCORE", Integer.toString(score));
+    }
+
     public void askForJoker(String joker) {
         if (joker.equals(activity.getResources().getString(R.string.phone))) {
             isUsedPhoneJoker = true;
@@ -118,10 +141,9 @@ public class Game extends FragmentActivity {
     }
 
     public void saveGameData() {
-        SharedPreferences.Editor editor = preferences.edit();
 
-        Log.v("SA PREFERENCES","Before: " + Integer.toString(actualQuestion));
-        editor.putBoolean(SHARED_PREF_GAME, true);
+        Log.v("SA PREFERENCES","After: " + Integer.toString(actualQuestion));
+        //editor.putBoolean(SHARED_PREF_GAME, preferences.getBoolean(SHARED_PREF_GAME, true));
         editor.putInt(SHARED_PREF_QUESTION_NUMBER, actualQuestion);
         editor.putString(SHARED_PREF_NAME_KEY, playerName);
         editor.putBoolean(SHARED_PREF_PHONE, isUsedPhoneJoker);
@@ -129,18 +151,18 @@ public class Game extends FragmentActivity {
         editor.putInt(SHARED_PREF_FIFTY_USED, questionFiftyJokerWereUsed);
         editor.putBoolean(SHARED_PREF_AUDIENCE, isUsedAudienceJoker);
         editor.commit();
+        Log.v("SA CARGAMOS SALVADO","Before: " + Boolean.toString(preferences.getBoolean(SHARED_PREF_GAME, false)));
     }
 
     public void restoreGameData() {
-        Log.v("RE PREFERENCES","Before: " + Integer.toString(actualQuestion));
-        actualQuestion = preferences.getInt(SHARED_PREF_QUESTION_NUMBER, 0);
         Log.v("RE PREFERENCES","After: " + Integer.toString(actualQuestion));
+        actualQuestion = preferences.getInt(SHARED_PREF_QUESTION_NUMBER, 0);
+        Log.v("RE PREFERENCES","Before: " + Integer.toString(actualQuestion));
         playerName = preferences.getString(SHARED_PREF_NAME_KEY, activity.getResources().getString(R.string.default_user_name));
         isUsedPhoneJoker = preferences.getBoolean(SHARED_PREF_PHONE, false);
         isUsedFiftyJoker = preferences.getBoolean(SHARED_PREF_FIFTY, false);
         questionFiftyJokerWereUsed = preferences.getInt(SHARED_PREF_FIFTY_USED, -1);
         isUsedAudienceJoker = preferences.getBoolean(SHARED_PREF_AUDIENCE, false);
-        isGameSaved = preferences.getBoolean(SHARED_PREF_GAME, false);
     }
 
     public String getJokerName(int pos) {
@@ -176,6 +198,10 @@ public class Game extends FragmentActivity {
 
     public String getPlayerName() {
         return playerName;
+    }
+
+    public int[] getListLevels() {
+        return listLevels;
     }
 
     public int getQuestionFiftyJokerWereUsed() {
@@ -450,4 +476,11 @@ public class Game extends FragmentActivity {
         return list;
     }
 
+    public void giveUpGame() {
+        finishGame(listLevels[actualQuestion]);
+    }
+
+    public boolean toSaveOrNotToSave() {
+        return false;
+    }
 }
