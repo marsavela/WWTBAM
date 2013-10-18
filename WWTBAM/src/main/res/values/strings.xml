@@ -37,7 +37,16 @@
     <string name="audience">Audience</string>
     <string name="phone">Phone</string>
     <string name="fifty">Fifty - Fifty</string>
-    <string name="preferences_file">es.serpat.wwtbam_preferences</string>
     <string name="default_user_name">Unknown Player</string>
+    <string name="sorry">SORRY</string>
+    <string name="sorry_message">We are sorry, but you are out of jokers.</string>
+    <string name="congratulations_message">You are now a millionaire. Enjoy.</string>
+    <string name="congratulations">CONGRATULATIONS</string>
+    <string name="right_message">Keep focused. Go ahead. What you want to do?</string>
+    <string name="right">WELL DONE</string>
+    <string name="ok">OK</string>
+    <string name="phone_message">\"I\'m pretty sure the right answer is the</string>
+    <string name="audience_message">The audience thinks the right answer is the</string>
+    <string name="pref_file">es.serpat.wwtbam_preferences</string>
 
 </resources>

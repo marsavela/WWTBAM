@@ -1,8 +1,8 @@
 package es.serpat.wwtbam;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
@@ -14,19 +14,30 @@ import java.util.List;
  */
 public class Game extends FragmentActivity {
 
-    private List<Question> questionList = generateQuestionList();
-    private int actualQuestion =0;
+    //Constants for saved data.
+    private String              SHARED_PREF_GAME               = "isGameSaved";
+    private String              SHARED_PREF_QUESTION_NUMBER    = "questionNumber";
+    private String              SHARED_PREF_NAME_KEY           = "playerName";
+    private String              SHARED_PREF_AUDIENCE           = "isUsedAudienceJoker";
+    private String              SHARED_PREF_FIFTY_USED         = "questionFiftyJokerWereUsed";
+    private String              SHARED_PREF_FIFTY              = "isUsedFiftyJoker";
+    private String              SHARED_PREF_PHONE              = "isUsedPhoneJoker";
 
-    private boolean	isUsedAudienceJoker = false;
-    private boolean	isUsedFiftyJoker = false;
-    private boolean	isUsedPhoneJoker = false;
+    private List<Question> questionList = null;
+    private int actualQuestion;
 
-    private SharedPreferences preferences;
+    private boolean	isUsedAudienceJoker;
+    private boolean	isUsedFiftyJoker;
+    private int questionFiftyJokerWereUsed;
+    private boolean	isUsedPhoneJoker;
 
+    private boolean isGameSaved;
 
     private String playerName = null;
 
     private Play activity;
+
+    private SharedPreferences preferences;
 
     private int listLevels[] = { 0, 100, 200, 300, 500, 1000, 2000, 4000, 8000,
             16000, 32000, 64000, 125000, 250000, 500000, 1000000};
@@ -34,17 +45,44 @@ public class Game extends FragmentActivity {
     public Game(Play activity) {
         this.activity = activity;
 
-        preferences =  activity.getSharedPreferences(activity.getResources().getString(R.string.preferences_file),
-                Activity.MODE_PRIVATE);
+        preferences = activity.getSharedPreferences(activity.getResources().getString(R.string.pref_file), Context.MODE_PRIVATE);
+
+        /*//numberOfJokers = preferences.getInt("previousJokers", 3);
+        playerName = preferences.getString("playerName", "NULL").trim();
+
+        if (playerName == null || playerName.equals("NULL")) {
+            playerName = activity.getResources().getString(R.string.default_user_name);
+        }*/
+
+        //Log.w("COMPROBATION NAME", playerName);
+
+        if (questionList == null)
+            questionList = generateQuestionList();
 
     }
 
-    public boolean initialComprobations() {
-        playerName = preferences.getString("playerName","NULL");
-        if (playerName.equals("") || playerName == null) {
-            playerName = activity.getResources().getString(R.string.default_user_name);
-        }
-        return true;
+    private List<String> getArrayJokers() {
+        List<String> list = new ArrayList<String>();
+
+        if (!isUsedPhoneJoker)
+            list.add(activity.getResources().getString(R.string.phone));
+        if (!isUsedFiftyJoker)
+            list.add(activity.getResources().getString(R.string.fifty));
+        if (!isUsedAudienceJoker)
+            list.add(activity.getResources().getString(R.string.audience));
+
+        return list;
+    }
+
+    public String numToLetter(String s) {
+        if (s.equals("1"))
+            return "A";
+        else if (s.equals("2"))
+            return "B";
+        else if (s.equals("3"))
+            return "C";
+        else
+            return "D";
     }
 
     /**
@@ -53,7 +91,7 @@ public class Game extends FragmentActivity {
      */
     public void testAnswer(String answer) {
         if (answer.equals(questionList.get(actualQuestion).right)) {
-            if (actualQuestion == questionList.size()-1) {
+            if (actualQuestion >= questionList.size()-1) {
                 activity.questionAnswered("win");
             } else {
                 actualQuestion++;
@@ -64,23 +102,60 @@ public class Game extends FragmentActivity {
         }
     }
 
+    public void askForJoker(String joker) {
+        if (joker.equals(activity.getResources().getString(R.string.phone))) {
+            isUsedPhoneJoker = true;
+            activity.showPhoneCallAnswer(numToLetter(questionList.get(actualQuestion).phone));
+        } else if (joker.equals(activity.getResources().getString(R.string.fifty))) {
+            isUsedFiftyJoker = true;
+            questionFiftyJokerWereUsed = actualQuestion;
+            activity.hideButton(numToLetter(questionList.get(actualQuestion).fifty1));
+            activity.hideButton(numToLetter(questionList.get(actualQuestion).fifty2));
+        } else if (joker.equals(activity.getResources().getString(R.string.audience))) {
+            isUsedAudienceJoker = true;
+            activity.showAudienceAnswer(numToLetter(questionList.get(actualQuestion).audience));
+        }
+    }
+
+    public void saveGameData() {
+        SharedPreferences.Editor editor = preferences.edit();
+
+        Log.v("SA PREFERENCES","Before: " + Integer.toString(actualQuestion));
+        editor.putBoolean(SHARED_PREF_GAME, true);
+        editor.putInt(SHARED_PREF_QUESTION_NUMBER, actualQuestion);
+        editor.putString(SHARED_PREF_NAME_KEY, playerName);
+        editor.putBoolean(SHARED_PREF_PHONE, isUsedPhoneJoker);
+        editor.putBoolean(SHARED_PREF_FIFTY, isUsedFiftyJoker);
+        editor.putInt(SHARED_PREF_FIFTY_USED, questionFiftyJokerWereUsed);
+        editor.putBoolean(SHARED_PREF_AUDIENCE, isUsedAudienceJoker);
+        editor.commit();
+    }
+
+    public void restoreGameData() {
+        Log.v("RE PREFERENCES","Before: " + Integer.toString(actualQuestion));
+        actualQuestion = preferences.getInt(SHARED_PREF_QUESTION_NUMBER, 0);
+        Log.v("RE PREFERENCES","After: " + Integer.toString(actualQuestion));
+        playerName = preferences.getString(SHARED_PREF_NAME_KEY, activity.getResources().getString(R.string.default_user_name));
+        isUsedPhoneJoker = preferences.getBoolean(SHARED_PREF_PHONE, false);
+        isUsedFiftyJoker = preferences.getBoolean(SHARED_PREF_FIFTY, false);
+        questionFiftyJokerWereUsed = preferences.getInt(SHARED_PREF_FIFTY_USED, -1);
+        isUsedAudienceJoker = preferences.getBoolean(SHARED_PREF_AUDIENCE, false);
+        isGameSaved = preferences.getBoolean(SHARED_PREF_GAME, false);
+    }
+
+    public String getJokerName(int pos) {
+        Log.w("ARRAY", getArrayJokers().get(pos));
+        return getArrayJokers().get(pos);
+    }
+
     public String[] getAllowedJokers() {
-
-        List<String> list = new ArrayList<String>();
-
-        if (!isUsedAudienceJoker)
-            list.add(activity.getResources().getString(R.string.audience));
-        if (!isUsedAudienceJoker)
-            list.add(activity.getResources().getString(R.string.fifty));
-        if (!isUsedAudienceJoker)
-            list.add(activity.getResources().getString(R.string.phone));
-
-        String[] str = new String[list.size()];
-        return list.toArray(str);
+        String[] str = new String[getArrayJokers().size()];
+        return getArrayJokers().toArray(str);
     }
 
     public boolean areJokersLeft() {
-        return 3-getAllowedJokers().length < Integer.parseInt(preferences.getString("numberHelps","NULL"));
+        Log.w("DISPONIBLES",Integer.toString(getAllowedJokers().length));
+        return 3-getAllowedJokers().length < preferences.getInt("numberJokers", 3);
     }
 
     public List<Question> getQuestionList() {
@@ -91,28 +166,28 @@ public class Game extends FragmentActivity {
         this.questionList = questionList;
     }
 
+    public boolean isGameSaved() {
+        return isGameSaved;
+    }
+
     public int getActualQuestion() {
         return actualQuestion;
     }
 
-    public void setActualQuestion(int actualQuestion) {
-        this.actualQuestion = actualQuestion;
+    public String getPlayerName() {
+        return playerName;
     }
 
-    public boolean isUsedAudienceJoker() {
-        return isUsedAudienceJoker;
+    public int getQuestionFiftyJokerWereUsed() {
+        return questionFiftyJokerWereUsed;
     }
 
-    public void setUsedAudienceJoker(boolean usedAudienceJoker) {
-        isUsedAudienceJoker = usedAudienceJoker;
+    public void setQuestionFiftyJokerWereUsed(int questionFiftyJokerWereUsed) {
+        this.questionFiftyJokerWereUsed = questionFiftyJokerWereUsed;
     }
 
-    public boolean isUsedFiftyJoker() {
-        return isUsedFiftyJoker;
-    }
-
-    public void setUsedFiftyJoker(boolean usedFiftyJoker) {
-        isUsedFiftyJoker = usedFiftyJoker;
+    public void setPlayerName(String playerName) {
+        this.playerName = playerName;
     }
 
     public boolean isUsedPhoneJoker() {
@@ -123,28 +198,24 @@ public class Game extends FragmentActivity {
         isUsedPhoneJoker = usedPhoneJoker;
     }
 
-    public String getPlayerName() {
-        return playerName;
+    public boolean isUsedFiftyJoker() {
+        return isUsedFiftyJoker;
     }
 
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
+    public void setUsedFiftyJoker(boolean usedFiftyJoker) {
+        isUsedFiftyJoker = usedFiftyJoker;
     }
 
-    public Play getActivity() {
-        return activity;
+    public boolean isUsedAudienceJoker() {
+        return isUsedAudienceJoker;
     }
 
-    public void setActivity(Play activity) {
-        this.activity = activity;
+    public void setUsedAudienceJoker(boolean usedAudienceJoker) {
+        isUsedAudienceJoker = usedAudienceJoker;
     }
 
-    public int[] getListLevels() {
-        return listLevels;
-    }
-
-    public void setListLevels(int[] listLevels) {
-        this.listLevels = listLevels;
+    public void setActualQuestion(int actualQuestion) {
+        this.actualQuestion = actualQuestion;
     }
 
     public List<Question> generateQuestionList() {
