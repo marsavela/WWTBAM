@@ -33,12 +33,4 @@ public class Question {
         this.fifty1 = fifty1;
         this.fifty2 = fifty2;
     }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
 }

@@ -55,7 +55,7 @@ public class MainActivity extends Activity {
     }
 
     private void launchPreferences() {
-        Intent i = new Intent(this, SetPreferences.class);
+        Intent i = new Intent(this, Preferences.class);
         startActivity(i);
     }
 

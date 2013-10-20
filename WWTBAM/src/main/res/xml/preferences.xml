@@ -2,11 +2,11 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <EditTextPreference
-        android:key="playerName"
+        android:key="@string/SHARED_PREF_NAME_KEY"
         android:title="@string/pref_name_title"
         android:summary="@string/pref_name_summary" />
     <ListPreference
-        android:key="numberJokers"
+        android:key="@string/SHARED_PREF_NUM_JOKERS"
         android:title="@string/pref_title_help"
         android:summary="@string/pref_help_summary"
         android:entries="@array/numHelps"

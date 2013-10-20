@@ -32,7 +32,7 @@
                 android:value="es.serpat.wwtbam.MainActivity" />
         </activity>
         <activity
-            android:name=".SetPreferences"
+            android:name=".Preferences"
             android:label="@string/settings"
             android:parentActivityName="es.serpat.wwtbam.MainActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->

@@ -1,9 +1,16 @@
 package es.serpat.wwtbam;
 
-import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,9 +20,9 @@ import java.util.List;
 public class Game extends FragmentActivity {
 
     //Constants for saved data.
-    private String SHARED_PREF_GAME = "isGameSaved";
+    //private String SHARED_PREF_GAME = "isGameSaved";
     private String SHARED_PREF_QUESTION_NUMBER = "questionNumber";
-    private String SHARED_PREF_NAME_KEY = "playerName";
+    //private String SHARED_PREF_NAME_KEY = "playerName";
     private String SHARED_PREF_AUDIENCE = "isUsedAudienceJoker";
     private String SHARED_PREF_FIFTY_USED = "questionFiftyJokerWereUsed";
     private String SHARED_PREF_FIFTY = "isUsedFiftyJoker";
@@ -35,24 +42,23 @@ public class Game extends FragmentActivity {
 
     private Play activity;
 
-    private SharedPreferences preferences;
-    private SharedPreferences.Editor editor;
-
     private int listLevels[] = {0, 100, 200, 300, 500, 1000, 2000, 4000, 8000,
             16000, 32000, 64000, 125000, 250000, 500000, 1000000};
 
     public Game(Play activity) {
         this.activity = activity;
 
-        preferences = activity.getSharedPreferences(activity.getResources().getString(R.string.pref_file), Context.MODE_PRIVATE);
-        editor = preferences.edit();
-
         if (questionList == null)
-            questionList = generateQuestionList();
+            try {
+                questionList = generateQuestionList();
+            } catch (XmlPullParserException e) {
+                e.printStackTrace();
+            }
 
-        isGameSaved = preferences.getBoolean(SHARED_PREF_GAME, false);
-
-        editor.putBoolean(SHARED_PREF_GAME, true);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        isGameSaved = sharedPref.getBoolean(activity.getResources().getString(R.string.SHARED_PREF_GAME), false);
+        editor.putBoolean(activity.getResources().getString(R.string.SHARED_PREF_GAME), true);
         editor.commit();
 
     }
@@ -117,8 +123,11 @@ public class Game extends FragmentActivity {
     }
 
     public void saveGameData() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt(SHARED_PREF_QUESTION_NUMBER, actualQuestion);
-        editor.putString(SHARED_PREF_NAME_KEY, playerName);
+        editor.putString(activity.getResources().getString(R.string.SHARED_PREF_NAME_KEY), playerName);
+        //editor.putString(SHARED_PREF_NAME_KEY, playerName);
         editor.putBoolean(SHARED_PREF_PHONE, isUsedPhoneJoker);
         editor.putBoolean(SHARED_PREF_FIFTY, isUsedFiftyJoker);
         editor.putInt(SHARED_PREF_FIFTY_USED, questionFiftyJokerWereUsed);
@@ -127,12 +136,15 @@ public class Game extends FragmentActivity {
     }
 
     public void restoreGameData() {
-        actualQuestion = preferences.getInt(SHARED_PREF_QUESTION_NUMBER, 0);
-        playerName = preferences.getString(SHARED_PREF_NAME_KEY, activity.getResources().getString(R.string.default_user_name));
-        isUsedPhoneJoker = preferences.getBoolean(SHARED_PREF_PHONE, false);
-        isUsedFiftyJoker = preferences.getBoolean(SHARED_PREF_FIFTY, false);
-        questionFiftyJokerWereUsed = preferences.getInt(SHARED_PREF_FIFTY_USED, -1);
-        isUsedAudienceJoker = preferences.getBoolean(SHARED_PREF_AUDIENCE, false);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
+        actualQuestion = sharedPref.getInt(SHARED_PREF_QUESTION_NUMBER, 0);
+        playerName = sharedPref.getString(activity.getResources().getString(R.string.SHARED_PREF_NAME_KEY),
+                activity.getResources().getString(R.string.default_user_name));
+        //playerName = sharedPref.getString(SHARED_PREF_NAME_KEY, activity.getResources().getString(R.string.default_user_name));
+        isUsedPhoneJoker = sharedPref.getBoolean(SHARED_PREF_PHONE, false);
+        isUsedFiftyJoker = sharedPref.getBoolean(SHARED_PREF_FIFTY, false);
+        questionFiftyJokerWereUsed = sharedPref.getInt(SHARED_PREF_FIFTY_USED, -1);
+        isUsedAudienceJoker = sharedPref.getBoolean(SHARED_PREF_AUDIENCE, false);
     }
 
     public String getJokerName(int pos) {
@@ -145,7 +157,8 @@ public class Game extends FragmentActivity {
     }
 
     public boolean areJokersLeft() {
-        return 3 - getAllowedJokers().length < preferences.getInt("numberJokers", 3);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
+        return (3 - getAllowedJokers().length) < Integer.parseInt(sharedPref.getString(activity.getResources().getString(R.string.SHARED_PREF_NUM_JOKERS), "3"));
     }
 
     public List<Question> getQuestionList() {
@@ -168,7 +181,14 @@ public class Game extends FragmentActivity {
         return isUsedFiftyJoker;
     }
 
-    public List<Question> generateQuestionList() {
+    public void setUnsaveGame() {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean(activity.getResources().getString(R.string.SHARED_PREF_GAME), false);
+        editor.commit();
+    }
+
+    public List<Question> generateQuestionList() throws XmlPullParserException {
         List<Question> list = new ArrayList<Question>();
         Question q;
 
@@ -398,10 +418,142 @@ public class Game extends FragmentActivity {
         list.add(q);
 
         return list;
+
+        /*List<Question> list = new ArrayList<Question>();
+        Question q;
+        InputStream inputStream = activity.getResources().openRawResource(R.raw.questions0001);
+
+        XmlPullParser parser = XmlPullParserFactory.newInstance().newPullParser();
+        parser.setInput(inputStream, null);
+
+        int eventType = XmlPullParser.START_DOCUMENT;
+
+        while (eventType != XmlPullParser.END_TAG) {
+            if (eventType == XmlPullParser.START_TAG) {
+                q = new Question(
+                        parser.getAttributeValue(null, "number"),
+                        parser.getAttributeValue(null,"text"),
+                        parser.getAttributeValue(null,"answer1"),
+                        parser.getAttributeValue(null,"answer2"),
+                        parser.getAttributeValue(null,"answer3"),
+                        parser.getAttributeValue(null,"answer4"),
+                        parser.getAttributeValue(null,"right"),
+                        parser.getAttributeValue(null,"audience"),
+                        parser.getAttributeValue(null,"phone"),
+                        parser.getAttributeValue(null,"fifty1"),
+                        parser.getAttributeValue(null,"fifty2")
+                );
+                list.add(q);
+            }
+            try {
+                eventType = parser.next();
+            } catch (XmlPullParserException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return list;*/
+    }
+    public List<Question> generateQuestionList2() throws XmlPullParserException {
+
+        List<Question> list = new ArrayList<Question>();
+        Question q;
+        InputStream inputStream = activity.getResources().openRawResource(R.raw.questions0001);
+
+        XmlPullParser parser = XmlPullParserFactory.newInstance().newPullParser();
+        parser.setInput(inputStream, null);
+
+        int eventType = XmlPullParser.START_DOCUMENT;
+
+        while (eventType != XmlPullParser.END_TAG) {
+            q = new Question();
+            if (eventType == XmlPullParser.START_TAG) {
+                q.number = parser.getAttributeValue(null, "number");
+                q.text = parser.getAttributeValue(null,"text");
+                q.answer1 = parser.getAttributeValue(null,"answer1");
+                q.answer2 = parser.getAttributeValue(null,"answer2");
+                q.answer3 = parser.getAttributeValue(null,"answer3");
+                q.answer4 = parser.getAttributeValue(null,"answer4");
+                q.right = parser.getAttributeValue(null,"right");
+                q.audience = parser.getAttributeValue(null,"audience");
+                q.phone = parser.getAttributeValue(null,"phone");
+                q.fifty1 = parser.getAttributeValue(null,"fifty1");
+                q.fifty2 = parser.getAttributeValue(null,"fifty2");
+            }
+            list.add(q);
+            try {
+                eventType = parser.next();
+            } catch (XmlPullParserException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    public List<Question> generateQuestionList3() throws XmlPullParserException {
+
+        List<Question> list = new ArrayList<Question>();
+        Question q;
+        InputStream inputStream = activity.getResources().openRawResource(R.raw.questions0001);
+
+        XmlPullParser parser = null;
+        try {
+            parser = XmlPullParserFactory.newInstance().newPullParser();
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        }
+        try {
+            parser.setInput(inputStream, null);
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        }
+        int eventType = XmlPullParser.START_DOCUMENT;
+
+        while (eventType != XmlPullParser.END_TAG) {
+            if (eventType == XmlPullParser.START_TAG) {
+                q = new Question(
+                        parser.getAttributeValue(null, "number"),
+                        parser.getAttributeValue(null,"text"),
+                        parser.getAttributeValue(null,"answer1"),
+                        parser.getAttributeValue(null,"answer2"),
+                        parser.getAttributeValue(null,"answer3"),
+                        parser.getAttributeValue(null,"answer4"),
+                        parser.getAttributeValue(null,"right"),
+                        parser.getAttributeValue(null,"audience"),
+                        parser.getAttributeValue(null,"phone"),
+                        parser.getAttributeValue(null,"fifty1"),
+                        parser.getAttributeValue(null,"fifty2")
+                );
+                list.add(q);
+                Log.v("XML", parser.getAttributeValue(null, "number"));
+            }
+            try {
+                eventType = parser.next();
+            } catch (XmlPullParserException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
-    public void setUnsaveGame() {
-        editor.putBoolean(SHARED_PREF_GAME, false);
-        editor.commit();
-    }
 }

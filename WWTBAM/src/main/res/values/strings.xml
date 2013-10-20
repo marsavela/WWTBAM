@@ -50,5 +50,9 @@
     <string name="pref_file">es.serpat.wwtbam_preferences</string>
     <string name="understood">UNDERSTOOD</string>
     <string name="finish">FINISH</string>
+    <string name="SHARED_PREF_NAME_KEY">playerName</string>
+    <string name="SHARED_PREF_NUM_JOKERS">numberJokers</string>
+    <string name="ad_new_game">Remember that you\'ll start a new game next time.</string>
+    <string name="SHARED_PREF_GAME">isGameSaved</string>
 
 </resources>

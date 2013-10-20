@@ -178,7 +178,7 @@ public class Play extends Activity {
         Button buttonC = (Button) findViewById(R.id.butC);
         Button buttonD = (Button) findViewById(R.id.butD);
 
-        textQuestion.setText(q.getText());
+        textQuestion.setText(q.text);
 
         buttonA.setText(q.answer1);
         buttonB.setText(q.answer2);
