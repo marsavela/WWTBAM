@@ -1,6 +1,8 @@
 package es.serpat.wwtbam;
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
@@ -35,6 +37,22 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
         }
         //TODO Hay que implementar un AlertDialog o algo que recuerde al usuario que si
         // cambia preferencias, perdera la partida actual, si es que hay alguna guardada.
+        if (PreferenceManager.getDefaultSharedPreferences(this)
+                .getBoolean(getResources().getString(R.string.SHARED_PREF_GAME),true) &&
+                savedInstanceState == null) {
+            new AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_menu_help)
+                    .setTitle(getString(R.string.sorry))
+                    .setMessage(getString(R.string.sorry_message))
+                    .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // The 'which' argument contains the index position
+                            // of the selected item
+                        }
+                    })
+                    .show();
+        }
     }
 
     @Override
@@ -75,6 +93,7 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
                 key.equals(getResources().getString(R.string.SHARED_PREF_NAME_KEY)))) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(getResources().getString(R.string.SHARED_PREF_GAME), false);
+            editor.commit();
             Toast.makeText(this, getResources().getString(R.string.ad_new_game), Toast.LENGTH_LONG).show();
         }
     }

@@ -428,10 +428,10 @@ public class Game extends FragmentActivity {
 
         int eventType = XmlPullParser.START_DOCUMENT;
 
-        while (eventType != XmlPullParser.END_TAG) {
+        while (eventType != XmlPullParser.END_DOCUMENT) {
             if (eventType == XmlPullParser.START_TAG) {
                 q = new Question(
-                        parser.getAttributeValue(null, "number"),
+                        parser.getAttributeValue(null,"number"),
                         parser.getAttributeValue(null,"text"),
                         parser.getAttributeValue(null,"answer1"),
                         parser.getAttributeValue(null,"answer2"),
@@ -472,7 +472,7 @@ public class Game extends FragmentActivity {
 
         int eventType = XmlPullParser.START_DOCUMENT;
 
-        while (eventType != XmlPullParser.END_TAG) {
+        while (eventType != XmlPullParser.END_DOCUMENT) {
             q = new Question();
             if (eventType == XmlPullParser.START_TAG) {
                 q.number = parser.getAttributeValue(null, "number");
@@ -522,7 +522,7 @@ public class Game extends FragmentActivity {
         }
         int eventType = XmlPullParser.START_DOCUMENT;
 
-        while (eventType != XmlPullParser.END_TAG) {
+        while (eventType != XmlPullParser.END_DOCUMENT) {
             if (eventType == XmlPullParser.START_TAG) {
                 q = new Question(
                         parser.getAttributeValue(null, "number"),
