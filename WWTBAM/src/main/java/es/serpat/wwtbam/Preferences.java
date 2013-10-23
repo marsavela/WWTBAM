@@ -39,6 +39,8 @@ public class Preferences extends PreferenceActivity implements OnSharedPreferenc
         // cambia preferencias, perdera la partida actual, si es que hay alguna guardada.
         if (PreferenceManager.getDefaultSharedPreferences(this)
                 .getBoolean(getResources().getString(R.string.SHARED_PREF_GAME),true) &&
+                PreferenceManager.getDefaultSharedPreferences(this)
+                        .getInt(getResources().getString(R.string.SHARED_PREF_QUESTION_NUMBER),0) > 0 &&
                 savedInstanceState == null) {
             new AlertDialog.Builder(this)
                     .setIcon(android.R.drawable.ic_menu_help)

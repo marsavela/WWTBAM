@@ -54,5 +54,6 @@
     <string name="SHARED_PREF_NUM_JOKERS">numberJokers</string>
     <string name="ad_new_game">Remember that you\'ll start a new game next time.</string>
     <string name="SHARED_PREF_GAME">isGameSaved</string>
+    <string name="SHARED_PREF_QUESTION_NUMBER">questionNumber</string>
 
 </resources>
