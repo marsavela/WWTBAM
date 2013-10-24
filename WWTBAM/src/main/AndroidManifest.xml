@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Play"
+            android:name=".PlayActivity"
             android:label="@string/play"
             android:parentActivityName="es.serpat.wwtbam.MainActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
@@ -32,7 +32,7 @@
                 android:value="es.serpat.wwtbam.MainActivity" />
         </activity>
         <activity
-            android:name=".Preferences"
+            android:name=".PreferencesActivity"
             android:label="@string/settings"
             android:parentActivityName="es.serpat.wwtbam.MainActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
@@ -41,7 +41,7 @@
                 android:value="es.serpat.wwtbam.MainActivity" />
         </activity>
         <activity
-            android:name=".Scores"
+            android:name=".ScoresActivity"
             android:label="@string/scores"
             android:parentActivityName="es.serpat.wwtbam.MainActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
@@ -50,11 +50,11 @@
                 android:value="es.serpat.wwtbam.MainActivity" />
         </activity>
         <activity
-            android:name=".Credits"
+            android:name=".CreditsActivity"
             android:label="@string/about"
             android:theme="@android:style/Theme.Holo.Light.Dialog" />
         <activity
-            android:name=".Friends"
+            android:name=".FriendsActivity"
             android:label="@string/friends"
             android:parentActivityName="es.serpat.wwtbam.Preferences">
             <!-- Parent activity meta-data to support 4.0 and lower -->

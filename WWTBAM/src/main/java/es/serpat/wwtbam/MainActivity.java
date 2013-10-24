@@ -45,22 +45,22 @@ public class MainActivity extends Activity {
     }
 
     private void launchScores() {
-        Intent i = new Intent(this, Scores.class);
+        Intent i = new Intent(this, ScoresActivity.class);
         startActivity(i);
     }
 
     private void launchGame() {
-        Intent i = new Intent(this, Play.class);
+        Intent i = new Intent(this, PlayActivity.class);
         startActivity(i);
     }
 
     private void launchPreferences() {
-        Intent i = new Intent(this, Preferences.class);
+        Intent i = new Intent(this, PreferencesActivity.class);
         startActivity(i);
     }
 
     public void launchAbout() {
-        Intent i = new Intent(this, Credits.class);
+        Intent i = new Intent(this, CreditsActivity.class);
         startActivity(i);
     }
 

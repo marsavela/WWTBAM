@@ -29,7 +29,7 @@ import java.util.Map;
 /**
  * Created by SergiuDaniel on 13/10/13.
  */
-public class Scores extends FragmentActivity implements ActionBar.TabListener {
+public class ScoresActivity extends FragmentActivity implements ActionBar.TabListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the

@@ -17,7 +17,7 @@ import android.widget.Toast;
 /**
  * Created by SergiuDaniel on 2/07/13.
  */
-public class Preferences extends PreferenceActivity implements OnSharedPreferenceChangeListener {
+public class PreferencesActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

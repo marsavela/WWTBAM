@@ -3,7 +3,6 @@ package es.serpat.wwtbam;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -40,12 +39,12 @@ public class Game extends FragmentActivity {
 
     private String playerName = null;
 
-    private Play activity;
+    private PlayActivity activity;
 
     private int listLevels[] = {0, 100, 200, 300, 500, 1000, 2000, 4000, 8000,
             16000, 32000, 64000, 125000, 250000, 500000, 1000000};
 
-    public Game(Play activity) {
+    public Game(PlayActivity activity) {
         this.activity = activity;
 
         if (questionList == null)

@@ -6,7 +6,7 @@ import android.os.Bundle;
 /**
  * Created by SergiuDaniel on 10/10/13.
  */
-public class Credits extends Activity {
+public class CreditsActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

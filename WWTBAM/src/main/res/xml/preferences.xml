@@ -4,7 +4,8 @@
     <EditTextPreference
         android:key="@string/SHARED_PREF_NAME_KEY"
         android:title="@string/pref_name_title"
-        android:summary="@string/pref_name_summary" />
+        android:summary="@string/pref_name_summary"
+        android:defaultValue="@string/default_user_name"/>
     <ListPreference
         android:key="@string/SHARED_PREF_NUM_JOKERS"
         android:title="@string/pref_title_help"
@@ -16,7 +17,6 @@
         android:key="addFriends"
         android:title="@string/pref_friends_title"
         android:summary="@string/pref_friends_summary">
-
         <intent android:action="es.serpat.wwtbam.Friends" />
 
     </PreferenceScreen>

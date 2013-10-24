@@ -21,7 +21,7 @@ import android.widget.TextView;
 /**
  * Created by SergiuDaniel on 15/10/13.
  */
-public class Play extends Activity {
+public class PlayActivity extends Activity {
 
     private Game game;
 
