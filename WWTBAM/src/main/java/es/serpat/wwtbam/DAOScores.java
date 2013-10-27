@@ -1,6 +1,5 @@
 package es.serpat.wwtbam;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -32,27 +31,34 @@ public class DAOScores {
         dbHelper.close();
     }
 
-    public Score createComment(String comment) {
-        ContentValues values = new ContentValues();
-        values.put(SQLHelper.COLUMN_COMMENT, comment);
+    public void createScore(String name, int score) {
+        database.beginTransaction();
+        database.execSQL("INSERT INTO " + SQLHelper.TABLE_SCORES + " (name, score) VALUES ('" +
+                name + "', " + score + ");");
+        database.setTransactionSuccessful();
+        database.endTransaction();
+        /*ContentValues values = new ContentValues();
+        values.put(SQLHelper.COLUMN_NAME, name);
+        values.put(SQLHelper.COLUMN_SCORE, score);
         long insertId = database.insert(SQLHelper.TABLE_SCORES, null,
-                values);
+                //values);
+        Cursor cursor = database.rawQuery("SELECT _id, name, score FROM " + SQLHelper.TABLE_SCORES,null);
         Cursor cursor = database.query(SQLHelper.TABLE_SCORES,
-                allColumns, SQLHelper.COLUMN_ID + " = " + insertId, null,
-                null, null, null);
+                //allColumns, SQLHelper.COLUMN_ID + " = " + insertId, null,
+                //null, null, null);
         cursor.moveToFirst();
         Score newScore = cursorToScore(cursor);
-        return newScore;
+        return newScore;*/
     }
 
-    public void deleteComment(Score comment) {
-        long id = comment.getId();
-        System.out.println("Comment deleted with id: " + id);
+    public void deleteScore(Score score) {
+        long id = score.getId();
+        System.out.println("Score deleted with id: " + id);
         database.delete(SQLHelper.TABLE_SCORES, SQLHelper.COLUMN_ID
                 + " = " + id, null);
     }
 
-    public List<Score> getAllComments() {
+    public List<Score> getAllScores() {
         List<Score> scoreList = new ArrayList<Score>();
 
         Cursor cursor = database.query(SQLHelper.TABLE_SCORES,
@@ -75,5 +81,9 @@ public class DAOScores {
         score.setName(cursor.getString(1));
         score.setScore(cursor.getInt(2));
         return score;
+    }
+
+    public void deleteDB(Context context) {
+        dbHelper.deleteDB(context);
     }
 }

@@ -35,8 +35,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        //TODO Hay que implementar un AlertDialog o algo que recuerde al usuario que si
-        // cambia preferencias, perdera la partida actual, si es que hay alguna guardada.
+        //TODO Hay que implementar un Dialog propio, para que no pete cuando se gira la pantalla.
         if (PreferenceManager.getDefaultSharedPreferences(this)
                 .getBoolean(getResources().getString(R.string.SHARED_PREF_GAME),true) &&
                 PreferenceManager.getDefaultSharedPreferences(this)

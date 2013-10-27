@@ -18,6 +18,7 @@ import java.util.List;
  */
 public class Game extends FragmentActivity {
 
+    private static final String SHARED_FINISH = "gameShouldFinish";
     //Constants for saved data.
     //private String SHARED_PREF_GAME = "isGameSaved";
     //private String SHARED_PREF_QUESTION_NUMBER = getString(R.string.SHARED_PREF_QUESTION_NUMBER);
@@ -37,7 +38,7 @@ public class Game extends FragmentActivity {
 
     private boolean isGameSaved;
 
-    private String playerName = null;
+    private String playerName;
 
     private PlayActivity activity;
 
@@ -57,6 +58,8 @@ public class Game extends FragmentActivity {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
         SharedPreferences.Editor editor = sharedPref.edit();
         isGameSaved = sharedPref.getBoolean(activity.getResources().getString(R.string.SHARED_PREF_GAME), false);
+        if (isGameSaved)
+            restoreGameData();
         editor.putBoolean(activity.getResources().getString(R.string.SHARED_PREF_GAME), true);
         editor.commit();
 
@@ -94,16 +97,54 @@ public class Game extends FragmentActivity {
     public void testAnswer(String answer) {
         if (answer.equals(questionList.get(actualQuestion).right)) {
             if (actualQuestion >= questionList.size() - 1) {
-                setUnsaveGame();
+                setUnsavedGame();
+                saveScore();
+                setShouldFinish();
                 activity.questionAnswered("win");
             } else {
                 actualQuestion++;
                 activity.questionAnswered("right");
             }
         } else {
-            setUnsaveGame();
+            setUnsavedGame();
+            saveScore();
+            setShouldFinish();
             activity.questionAnswered("wrong");
         }
+    }
+
+    public boolean shouldFinish() {
+        return PreferenceManager.getDefaultSharedPreferences(activity).getBoolean(SHARED_FINISH, false);
+    }
+
+    private void setShouldFinish() {
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(activity).edit();
+        editor.putBoolean(SHARED_FINISH, true);
+        editor.commit();
+    }
+
+    public void setShouldNotFinish() {
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(activity).edit();
+        editor.putBoolean(SHARED_FINISH, false);
+        editor.commit();
+    }
+
+    public void saveScore() {
+        int score;
+        if (PreferenceManager.getDefaultSharedPreferences(activity).getBoolean(
+                activity.getResources().getString(R.string.SHARED_PREF_GAME), false))
+            score = listLevels[actualQuestion];
+        else if (actualQuestion>10)
+            score = listLevels[10];
+        else score = listLevels[5];
+
+        DAOScores daoScores = new DAOScores(activity);
+        daoScores.open();
+
+        daoScores.createScore(PreferenceManager.getDefaultSharedPreferences(activity).
+                getString(activity.getResources().getString(R.string.SHARED_PREF_NAME_KEY),
+                activity.getResources().getString(R.string.default_user_name)), score);
+        daoScores.close();
     }
 
     public void askForJoker(String joker) {
@@ -180,7 +221,7 @@ public class Game extends FragmentActivity {
         return isUsedFiftyJoker;
     }
 
-    public void setUnsaveGame() {
+    public void setUnsavedGame() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putBoolean(activity.getResources().getString(R.string.SHARED_PREF_GAME), false);

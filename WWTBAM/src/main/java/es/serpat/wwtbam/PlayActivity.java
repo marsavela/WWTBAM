@@ -1,12 +1,11 @@
 package es.serpat.wwtbam;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,11 +20,9 @@ import android.widget.TextView;
 /**
  * Created by SergiuDaniel on 15/10/13.
  */
-public class PlayActivity extends Activity {
+public class PlayActivity extends FragmentActivity implements OnClickDialogFragment {
 
     private Game game;
-
-    SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +37,10 @@ public class PlayActivity extends Activity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         game = new Game(this);
-        preferences = this.getSharedPreferences(getResources().getString(R.string.pref_file), Context.MODE_PRIVATE);
+        //SharedPreferences preferences = this.getSharedPreferences(getResources().getString(R.string.pref_file), Context.MODE_PRIVATE);
 
-        if (game.isGameSaved())
-            game.restoreGameData();
+        //if (game.isGameSaved())
+            //game.restoreGameData();
 
         Initialization();
 
@@ -67,14 +64,18 @@ public class PlayActivity extends Activity {
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
             case R.id.action_play_joker:
-                if (game.areJokersLeft()) {
+                //TODO arreglar esto. Ya he implementado los Dialog propios, pero hay que hacer que
+                //funcionen con las diferentes pantallas.
+                showDialog();
+                /*if (game.areJokersLeft()) {
                     showAvailableJokers();
                 } else {
                     showAlertNoAvailableJokers();
-                }
+                }*/
                 return true;
             case R.id.action_play_end_game:
-                game.setUnsaveGame();
+                game.saveScore();
+                game.setUnsavedGame();
                 finish();
             default:
                 return super.onOptionsItemSelected(item);
@@ -84,6 +85,11 @@ public class PlayActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (game.shouldFinish()) {
+            game.setShouldNotFinish();
+            finish();
+        }
 
         if (game.getActualQuestion() == 0 && !game.isGameSaved())
             drawActualQuestion();
@@ -239,13 +245,13 @@ public class PlayActivity extends Activity {
                     .setNeutralButton(getString(R.string.finish), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            game.setUnsaveGame();
                             finish();
                         }
 
                     })
                     .show();
         } else if (s.equals("right")) {
+            //TODO Hacer un Dialog propio para que no pete cuando gira la pantalla.
             new AlertDialog.Builder(this)
                     .setIcon(R.drawable.btn_check_on)
                     .setCancelable(false)
@@ -261,7 +267,8 @@ public class PlayActivity extends Activity {
                     .setNegativeButton(getString(R.string.give_up), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            game.setUnsaveGame();
+                            game.saveScore();
+                            game.setUnsavedGame();
                             finish();
                         }
 
@@ -276,7 +283,6 @@ public class PlayActivity extends Activity {
                     .setNeutralButton(getString(R.string.understood), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            game.setUnsaveGame();
                             finish();
                         }
 
@@ -289,7 +295,7 @@ public class PlayActivity extends Activity {
      * Called by the game class to hide a false answer when the 50/50 joker is used
      *
      * @param id , the number of the button to hide
-     */
+     **/
     public void hideButton(String id) {
         Animation out = AnimationUtils.loadAnimation(this,R.anim.fade_out);
 
@@ -340,5 +346,24 @@ public class PlayActivity extends Activity {
 
                 })
                 .show();
+    }
+
+    // Dialog
+
+    private void showDialog() {
+        DialogFragment newFragment = MyAlertDialogFragment.newInstance(this,
+                getString(R.string.ok),
+                getString(R.string.app_name));
+        newFragment.show(getSupportFragmentManager(), "dialog");
+    }
+
+    @Override
+    public void doPositiveClick() {
+
+    }
+
+    @Override
+    public void doNegativeClick() {
+
     }
 }

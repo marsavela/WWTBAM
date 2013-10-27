@@ -23,7 +23,9 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,7 +47,7 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
      */
     ViewPager mViewPager;
 
-    //private AlertDialog confirmationDialog;
+    private DAOScores daoScores;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,6 +125,7 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
     }
 
     private void confirmDeletion() {
+        //TODO Hay que actualizar el adapter para que al borrar la base de datos, actualice la vista.
         new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_delete)
                 .setTitle(getString(R.string.delete_scores))
@@ -130,12 +133,16 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
                 .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //finish();
+                        deleteDB();
                     }
 
                 })
                 .setNegativeButton(getString(R.string.no), null)
                 .show();
+    }
+
+    private void deleteDB() {
+        daoScores.deleteDB(super.getBaseContext());
     }
 
     @Override
@@ -197,13 +204,22 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
     /**
      * A fragment that launches other parts of the demo application.
      */
-    public static class localScores extends ListFragment {
+    public class localScores extends ListFragment {
 
         private ArrayList<Map<String, String>> buildData() {
+            daoScores = new DAOScores(super.getActivity());
+            daoScores.open();
+            List<Score> scores = daoScores.getAllScores();
+            Collections.sort(scores);
+
             ArrayList<Map<String, String>> listScores = new ArrayList<Map<String, String>>();
-            listScores.add(putData("Android", "3000"));
-            listScores.add(putData("Windows7", "5000"));
-            listScores.add(putData("iPhone", "65454"));
+            for (Score sc : scores) {
+                listScores.add(putData(sc.getName(),Integer.toString(sc.getScore())));
+            }
+
+            //listScores.add(putData("Android", "3000"));
+            //listScores.add(putData("Windows7", "5000"));
+            //listScores.add(putData("iPhone", "65454"));
             return listScores;
         }
 
@@ -243,7 +259,7 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
     /**
      * A fragment that launches other parts of the demo application.
      */
-    public static class friendsScores extends Fragment {
+    public class friendsScores extends Fragment {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
