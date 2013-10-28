@@ -1,8 +1,7 @@
 package es.serpat.wwtbam;
 
 import android.app.ActionBar;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.DialogFragment;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -41,6 +39,10 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
                 PreferenceManager.getDefaultSharedPreferences(this)
                         .getInt(getResources().getString(R.string.SHARED_PREF_QUESTION_NUMBER),0) > 0 &&
                 savedInstanceState == null) {
+            DialogFragment fragment = AlertDialogFragmentOneChoice.newInstance(
+                    getString(R.string.you_lost),getString(R.string.try_again));
+            fragment.show(getFragmentManager(), "wrongDialog");
+            /*//TODO Esta clase no extiende de Fragments, por lo tanto no se puede implementar el dialogo propio.
             new AlertDialog.Builder(this)
                     .setIcon(android.R.drawable.ic_menu_help)
                     .setTitle(getString(R.string.sorry))
@@ -52,7 +54,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
                             // of the selected item
                         }
                     })
-                    .show();
+                    .show();*/
         }
     }
 
@@ -88,7 +90,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         // Let's do something when my counter preference value changes
-        Log.v("asdlkjh",getResources().getString(R.string.SHARED_PREF_GAME));
         if (sharedPreferences.getBoolean(getResources().getString(R.string.SHARED_PREF_GAME),true) &&
                 (key.equals(getResources().getString(R.string.SHARED_PREF_NUM_JOKERS)) ||
                 key.equals(getResources().getString(R.string.SHARED_PREF_NAME_KEY)))) {

@@ -126,6 +126,7 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
 
     private void confirmDeletion() {
         //TODO Hay que actualizar el adapter para que al borrar la base de datos, actualice la vista.
+        //Tambien cambiar AlertDialogFragmentTwoChoices para que funcione aqui tambien.
         new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_delete)
                 .setTitle(getString(R.string.delete_scores))
@@ -206,6 +207,11 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
      */
     public class localScores extends ListFragment {
 
+        //TODO Peta cuando se gira la pantalla. :/
+
+        public localScores() {
+        }
+
         private ArrayList<Map<String, String>> buildData() {
             daoScores = new DAOScores(super.getActivity());
             daoScores.open();
@@ -260,6 +266,9 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
      * A fragment that launches other parts of the demo application.
      */
     public class friendsScores extends Fragment {
+
+        public friendsScores() {
+        }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,

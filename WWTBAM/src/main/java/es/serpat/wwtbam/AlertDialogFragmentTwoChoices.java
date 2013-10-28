@@ -2,22 +2,22 @@ package es.serpat.wwtbam;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 
 /**
  * Created by sergiu on 27/10/13.
  */
 
-public class MyAlertDialogFragment extends DialogFragment {
+public class AlertDialogFragmentTwoChoices extends DialogFragment {
 
-    private static OnClickDialogFragment onClick;
+    private static OnClickAlertDialogFragmentTwoChoices onClick;
 
-    public static MyAlertDialogFragment newInstance( OnClickDialogFragment onClickInterface,
+    public static AlertDialogFragmentTwoChoices newInstance( OnClickAlertDialogFragmentTwoChoices onClickInterface,
                                                      String title, String message) {
         onClick = onClickInterface;
-        MyAlertDialogFragment frag = new MyAlertDialogFragment();
+        AlertDialogFragmentTwoChoices frag = new AlertDialogFragmentTwoChoices();
         Bundle args = new Bundle();
         args.putString("title", title);
         args.putString("message", message);
@@ -31,17 +31,17 @@ public class MyAlertDialogFragment extends DialogFragment {
         String message = getArguments().getString("message");
 
         return new AlertDialog.Builder(getActivity())
-                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setIcon(R.drawable.btn_check_on)
                 .setTitle(title)
                 .setMessage(message)
-                .setPositiveButton("Aceptar",
+                .setPositiveButton(getString(R.string.next),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,
                                                 int whichButton) {
                                 onClick.doPositiveClick();
                             }
                         })
-                .setNegativeButton("Cancelar",
+                .setNegativeButton(getString(R.string.give_up),
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,
                                                 int whichButton) {

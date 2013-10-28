@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class Game extends FragmentActivity {
 
-    private static final String SHARED_FINISH = "gameShouldFinish";
+    //private static final String SHARED_FINISH = "gameShouldFinish";
     //Constants for saved data.
     //private String SHARED_PREF_GAME = "isGameSaved";
     //private String SHARED_PREF_QUESTION_NUMBER = getString(R.string.SHARED_PREF_QUESTION_NUMBER);
@@ -99,7 +99,7 @@ public class Game extends FragmentActivity {
             if (actualQuestion >= questionList.size() - 1) {
                 setUnsavedGame();
                 saveScore();
-                setShouldFinish();
+                //setShouldFinish();
                 activity.questionAnswered("win");
             } else {
                 actualQuestion++;
@@ -108,11 +108,11 @@ public class Game extends FragmentActivity {
         } else {
             setUnsavedGame();
             saveScore();
-            setShouldFinish();
+            //setShouldFinish();
             activity.questionAnswered("wrong");
         }
     }
-
+/*
     public boolean shouldFinish() {
         return PreferenceManager.getDefaultSharedPreferences(activity).getBoolean(SHARED_FINISH, false);
     }
@@ -127,7 +127,7 @@ public class Game extends FragmentActivity {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(activity).edit();
         editor.putBoolean(SHARED_FINISH, false);
         editor.commit();
-    }
+    }*/
 
     public void saveScore() {
         int score;
