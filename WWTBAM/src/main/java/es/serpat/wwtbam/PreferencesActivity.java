@@ -33,7 +33,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        //TODO Hay que implementar un Dialog propio, para que no pete cuando se gira la pantalla.
+
         if (PreferenceManager.getDefaultSharedPreferences(this)
                 .getBoolean(getResources().getString(R.string.SHARED_PREF_GAME),true) &&
                 PreferenceManager.getDefaultSharedPreferences(this)
@@ -42,7 +42,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
             DialogFragment fragment = AlertDialogFragmentOneChoice.newInstance(
                     getString(R.string.you_lost),getString(R.string.try_again));
             fragment.show(getFragmentManager(), "wrongDialog");
-            /*//TODO Esta clase no extiende de Fragments, por lo tanto no se puede implementar el dialogo propio.
+            /*
             new AlertDialog.Builder(this)
                     .setIcon(android.R.drawable.ic_menu_help)
                     .setTitle(getString(R.string.sorry))

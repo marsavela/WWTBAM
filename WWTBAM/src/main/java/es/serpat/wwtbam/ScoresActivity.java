@@ -47,7 +47,7 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
      */
     ViewPager mViewPager;
 
-    private DAOScores daoScores;
+    private static DAOScores daoScores;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -205,9 +205,7 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
     /**
      * A fragment that launches other parts of the demo application.
      */
-    public class localScores extends ListFragment {
-
-        //TODO Peta cuando se gira la pantalla. :/
+    public static class localScores extends ListFragment {
 
         public localScores() {
         }
@@ -265,7 +263,7 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
     /**
      * A fragment that launches other parts of the demo application.
      */
-    public class friendsScores extends Fragment {
+    public static class friendsScores extends Fragment {
 
         public friendsScores() {
         }

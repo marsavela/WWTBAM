@@ -1,11 +1,11 @@
 package es.serpat.wwtbam;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,7 +20,7 @@ import android.widget.TextView;
 /**
  * Created by SergiuDaniel on 15/10/13.
  */
-public class PlayActivity extends FragmentActivity implements OnClickAlertDialogFragmentTwoChoices, OnClickAlertDialogFragmentList {
+public class PlayActivity extends Activity implements OnClickAlertDialogFragmentTwoChoices, OnClickAlertDialogFragmentList {
 
     private Game game;
 
@@ -64,8 +64,6 @@ public class PlayActivity extends FragmentActivity implements OnClickAlertDialog
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
             case R.id.action_play_joker:
-                //TODO arreglar esto. Ya he implementado los Dialog propios, pero hay que hacer que
-                //funcionen con las diferentes pantallas.
                 //showDialog();
                 if (game.areJokersLeft()) {
                     //showAvailableJokers();
@@ -367,15 +365,6 @@ public class PlayActivity extends FragmentActivity implements OnClickAlertDialog
 
                 })
                 .show();*/
-    }
-
-    // Dialog
-
-    private void showDialog() {
-        DialogFragment newFragment = AlertDialogFragmentTwoChoices.newInstance(this,
-                getString(R.string.ok),
-                getString(R.string.app_name));
-        newFragment.show(getFragmentManager(), "dialog");
     }
 
     @Override
