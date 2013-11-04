@@ -3,7 +3,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Add Friend, should appear as action button -->
     <item
-        android:id="@+id/action_search"
+        android:id="@+id/add_new_friend"
         android:title="@string/action_addFriend"
         android:showAsAction="always" />
 </menu>
