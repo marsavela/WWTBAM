@@ -26,7 +26,7 @@ public class AlertDialogFragmentOneChoice extends DialogFragment {
         String message = getArguments().getString("message");
 
         if (message.equals("wrong"))
-            return  new AlertDialog.Builder(getActivity())
+            return new AlertDialog.Builder(getActivity())
                     .setIcon(android.R.drawable.ic_delete)
                     .setTitle(getString(R.string.you_lost))
                     .setMessage(getString(R.string.try_again))
@@ -38,7 +38,7 @@ public class AlertDialogFragmentOneChoice extends DialogFragment {
 
                     }).create();
         else if (message.equals(getString(R.string.audience_message)))
-            return  new AlertDialog.Builder(getActivity())
+            return new AlertDialog.Builder(getActivity())
                     .setIcon(android.R.drawable.ic_menu_call)
                     .setTitle(getString(R.string.audience))
                     .setMessage(getString(R.string.audience_message) + " " + title + "\"")

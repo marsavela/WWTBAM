@@ -16,8 +16,8 @@ public class DAOScores {
     // Database fields
     private SQLiteDatabase database;
     private SQLHelper dbHelper;
-    private String[] allColumns = { SQLHelper.COLUMN_ID,
-            SQLHelper.COLUMN_NAME, SQLHelper.COLUMN_SCORE };
+    private String[] allColumns = {SQLHelper.COLUMN_ID,
+            SQLHelper.COLUMN_NAME, SQLHelper.COLUMN_SCORE};
 
     public DAOScores(Context context) {
         dbHelper = new SQLHelper(context);

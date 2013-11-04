@@ -3,7 +3,7 @@ package es.serpat.wwtbam;
 /**
  * Created by SergiuDaniel on 24/10/13.
  */
-public class Score implements Comparable<Score>{
+public class Score implements Comparable<Score> {
     private int id;
     private String name;
     private int score;
@@ -34,9 +34,9 @@ public class Score implements Comparable<Score>{
 
     @Override
     public int compareTo(Score score) {
-        if (this.score>score.score)
+        if (this.score > score.score)
             return -1;
-        else if (this.score< score.score)
+        else if (this.score < score.score)
             return 1;
         else return 0;
     }

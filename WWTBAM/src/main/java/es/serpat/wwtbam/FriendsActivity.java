@@ -87,7 +87,6 @@ public class FriendsActivity extends ListActivity {
     }
 
 
-
     private void add_new_friend() {
         AlertDialog.Builder alert = new AlertDialog.Builder(context);
         alert.setTitle(R.string.action_addFriend); //Set Alert dialog title here
@@ -96,7 +95,6 @@ public class FriendsActivity extends ListActivity {
         // Set an EditText view to get user input
         final EditText input = new EditText(context);
         alert.setView(input);
-
 
 
         alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -132,7 +130,7 @@ public class FriendsActivity extends ListActivity {
         }
         try {
             HttpResponse response = (BasicHttpResponse) client.execute(request);
-   //         HttpResponse response = client.execute(request);
+            //         HttpResponse response = client.execute(request);
         } catch (IOException e) {
             e.printStackTrace();
         }

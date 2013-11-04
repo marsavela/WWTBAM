@@ -40,7 +40,7 @@ public class PlayActivity extends Activity implements OnClickAlertDialogFragment
         //SharedPreferences preferences = this.getSharedPreferences(getResources().getString(R.string.pref_file), Context.MODE_PRIVATE);
 
         //if (game.isGameSaved())
-            //game.restoreGameData();
+        //game.restoreGameData();
 
         Initialization();
 
@@ -70,7 +70,7 @@ public class PlayActivity extends Activity implements OnClickAlertDialogFragment
                     DialogFragment fragment = AlertDialogFragmentList.newInstance(this, game.getAllowedJokers());
                     fragment.show(getFragmentManager(), "list_of_jokers");
                 } else {
-                    DialogFragment fragment = AlertDialogFragmentOneChoice.newInstance(getString(R.string.sorry),getString(R.string.sorry_message));
+                    DialogFragment fragment = AlertDialogFragmentOneChoice.newInstance(getString(R.string.sorry), getString(R.string.sorry_message));
                     fragment.show(getFragmentManager(), "noAvailableJokers");
                     //showAlertNoAvailableJokers();
                 }
@@ -240,7 +240,7 @@ public class PlayActivity extends Activity implements OnClickAlertDialogFragment
     public void questionAnswered(String s) {
         if (s.equals("win")) {
             DialogFragment fragment = AlertDialogFragmentOneChoice.newInstance(
-                    getString(R.string.congratulations),getString(R.string.congratulations_message));
+                    getString(R.string.congratulations), getString(R.string.congratulations_message));
             fragment.setCancelable(false);
             fragment.show(getFragmentManager(), "winDialog");
             /*new AlertDialog.Builder(this)
@@ -287,7 +287,7 @@ public class PlayActivity extends Activity implements OnClickAlertDialogFragment
                     .show();*/
         } else if (s.equals("wrong")) {
             DialogFragment fragment = AlertDialogFragmentOneChoice.newInstance(
-                    getString(R.string.you_lost),"wrong");
+                    getString(R.string.you_lost), "wrong");
             fragment.setCancelable(false);
             fragment.show(getFragmentManager(), "wrongDialog");
             /*new AlertDialog.Builder(this)
@@ -310,9 +310,9 @@ public class PlayActivity extends Activity implements OnClickAlertDialogFragment
      * Called by the game class to hide a false answer when the 50/50 joker is used
      *
      * @param id , the number of the button to hide
-     **/
+     */
     public void hideButton(String id) {
-        Animation out = AnimationUtils.loadAnimation(this,R.anim.fade_out);
+        Animation out = AnimationUtils.loadAnimation(this, R.anim.fade_out);
 
         Button button = reHideButton(id);
         TextView text = (TextView) findViewById(getResources().getIdentifier("text" + id, "id",

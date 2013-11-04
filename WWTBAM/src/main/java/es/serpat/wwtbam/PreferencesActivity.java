@@ -35,12 +35,12 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         }
 
         if (PreferenceManager.getDefaultSharedPreferences(this)
-                .getBoolean(getResources().getString(R.string.SHARED_PREF_GAME),true) &&
+                .getBoolean(getResources().getString(R.string.SHARED_PREF_GAME), true) &&
                 PreferenceManager.getDefaultSharedPreferences(this)
-                        .getInt(getResources().getString(R.string.SHARED_PREF_QUESTION_NUMBER),0) > 0 &&
+                        .getInt(getResources().getString(R.string.SHARED_PREF_QUESTION_NUMBER), 0) > 0 &&
                 savedInstanceState == null) {
             DialogFragment fragment = AlertDialogFragmentOneChoice.newInstance(
-                    getString(R.string.you_lost),getString(R.string.try_again));
+                    getString(R.string.you_lost), getString(R.string.try_again));
             fragment.show(getFragmentManager(), "wrongDialog");
             /*
             new AlertDialog.Builder(this)
@@ -90,9 +90,9 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         // Let's do something when my counter preference value changes
-        if (sharedPreferences.getBoolean(getResources().getString(R.string.SHARED_PREF_GAME),true) &&
+        if (sharedPreferences.getBoolean(getResources().getString(R.string.SHARED_PREF_GAME), true) &&
                 (key.equals(getResources().getString(R.string.SHARED_PREF_NUM_JOKERS)) ||
-                key.equals(getResources().getString(R.string.SHARED_PREF_NAME_KEY)))) {
+                        key.equals(getResources().getString(R.string.SHARED_PREF_NAME_KEY)))) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(getResources().getString(R.string.SHARED_PREF_GAME), false);
             editor.commit();
@@ -110,8 +110,6 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
             addPreferencesFromResource(R.xml.preferences);
         }
     }
-
-
 
 
 }

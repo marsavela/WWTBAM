@@ -134,7 +134,7 @@ public class Game extends FragmentActivity {
         if (PreferenceManager.getDefaultSharedPreferences(activity).getBoolean(
                 activity.getResources().getString(R.string.SHARED_PREF_GAME), false))
             score = listLevels[actualQuestion];
-        else if (actualQuestion>10)
+        else if (actualQuestion > 10)
             score = listLevels[10];
         else score = listLevels[5];
 
@@ -143,7 +143,7 @@ public class Game extends FragmentActivity {
 
         daoScores.createScore(PreferenceManager.getDefaultSharedPreferences(activity).
                 getString(activity.getResources().getString(R.string.SHARED_PREF_NAME_KEY),
-                activity.getResources().getString(R.string.default_user_name)), score);
+                        activity.getResources().getString(R.string.default_user_name)), score);
         daoScores.close();
     }
 
@@ -241,17 +241,17 @@ public class Game extends FragmentActivity {
         while (eventType != XmlPullParser.END_DOCUMENT) {
             if (eventType == XmlPullParser.START_TAG && parser.getName().equals("question")) {
                 q = new Question(
-                        parser.getAttributeValue(null,"number"),
-                        parser.getAttributeValue(null,"text"),
-                        parser.getAttributeValue(null,"answer1"),
-                        parser.getAttributeValue(null,"answer2"),
-                        parser.getAttributeValue(null,"answer3"),
-                        parser.getAttributeValue(null,"answer4"),
-                        parser.getAttributeValue(null,"right"),
-                        parser.getAttributeValue(null,"audience"),
-                        parser.getAttributeValue(null,"phone"),
-                        parser.getAttributeValue(null,"fifty1"),
-                        parser.getAttributeValue(null,"fifty2")
+                        parser.getAttributeValue(null, "number"),
+                        parser.getAttributeValue(null, "text"),
+                        parser.getAttributeValue(null, "answer1"),
+                        parser.getAttributeValue(null, "answer2"),
+                        parser.getAttributeValue(null, "answer3"),
+                        parser.getAttributeValue(null, "answer4"),
+                        parser.getAttributeValue(null, "right"),
+                        parser.getAttributeValue(null, "audience"),
+                        parser.getAttributeValue(null, "phone"),
+                        parser.getAttributeValue(null, "fifty1"),
+                        parser.getAttributeValue(null, "fifty2")
                 );
                 list.add(q);
             }

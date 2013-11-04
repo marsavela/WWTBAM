@@ -14,8 +14,8 @@ public class AlertDialogFragmentTwoChoices extends DialogFragment {
 
     private static OnClickAlertDialogFragmentTwoChoices onClick;
 
-    public static AlertDialogFragmentTwoChoices newInstance( OnClickAlertDialogFragmentTwoChoices onClickInterface,
-                                                     String title, String message) {
+    public static AlertDialogFragmentTwoChoices newInstance(OnClickAlertDialogFragmentTwoChoices onClickInterface,
+                                                            String title, String message) {
         onClick = onClickInterface;
         AlertDialogFragmentTwoChoices frag = new AlertDialogFragmentTwoChoices();
         Bundle args = new Bundle();
