@@ -1,0 +1,53 @@
+<resources>
+
+    <string name="about">CREDITOS</string>
+    <string name="about_text">Ésta aplicación ha sido creada para ADM por Sergiu Daniel Marsavela y Patrick Mondria Simoes</string>
+    <string name="action_addFriend">AÑADIR AMIGO</string>
+    <string name="action_delScores">BORRAR</string>
+    <string name="action_end_game">FINALIZAR PARTIDA</string>
+    <string name="action_help">COMODINES</string>
+    <string name="ad_new_game">Recuerde que empezará una nueva partida la próxima vez</string>
+    <string name="app_name">QQSM</string>
+    <string name="audience">Audiencia</string>
+    <string name="audience_message">La audiencia cree que la respuesta correcta es la</string>
+    <string name="congratulations">FELICIDADES</string>
+    <string name="congratulations_message">Ahora eres millonario. Disfruta!</string>
+    <string name="default_user_name">Jugador Desconocido</string>
+    <string name="delete_scores">Borrar puntuaciones</string>
+    <string name="delete_scores_confirmation">Está seguro de que quiere eliminar las puntuaciones locales?</string>
+    <string name="fifty">50 %</string>
+    <string name="finish">FINALIZAR</string>
+    <string name="friends">AMIGOS</string>
+    <string name="give_up">Rendirse</string>
+    <string name="local">LOCAL</string>
+    <string name="low_about">Creditos</string>
+    <string name="low_play">Jugar</string>
+    <string name="low_scores">Puntuaciones</string>
+    <string name="low_settings">Opciones</string>
+    <string name="main">MAIN</string>
+    <string name="next">Siguiente</string>
+    <string name="no">No</string>
+    <string name="ok">OK</string>
+    <string name="phone">Teléfono</string>
+    <string name="phone_message">Estoy bastante seguro de que la respuesta correcta es la</string>
+    <string name="pick_joker">Seleccione un comodin</string>
+    <string name="play">JUGAR</string>
+    <string name="pref_friends_summary">Añada amigos para comparar puntuaciones</string>
+    <string name="pref_friends_title">Adadir amigo</string>
+    <string name="pref_help_summary">Seleccione cuantas veces puede pedir ayuda.</string>
+    <string name="pref_name_summary">Introduzca su nombre</string>
+    <string name="pref_name_title">Nombre</string>
+    <string name="pref_title_help">Número de ayudas</string>
+    <string name="right">BIEN HECHO</string>
+    <string name="right_message">Concéntrese. Siga adelante. Qué quiere hacer?</string>
+    <string name="scores">PUNTUACIONES</string>
+    <string name="settings">OPCIONES</string>
+    <string name="sorry">SE SIENTE</string>
+    <string name="sorry_message">Lo sentimos, pero no le quedan comodines.</string>
+    <string name="try_again">Vuelva a intentarlo. Sabemos que lo puedes hacer.</string>
+    <string name="understood">ENTENDIDO</string>
+    <string name="users">TODOS LOS USUARIOS</string>
+    <string name="yes">Si</string>
+    <string name="you_lost">Ha perdido</string>
+
+</resources>

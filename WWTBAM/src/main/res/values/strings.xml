@@ -45,7 +45,7 @@
     <string name="right_message">Keep focused. Go ahead. What you want to do?</string>
     <string name="right">WELL DONE</string>
     <string name="ok">OK</string>
-    <string name="phone_message">\"I\'m pretty sure the right answer is the</string>
+    <string name="phone_message">I\'m pretty sure the right answer is the</string>
     <string name="audience_message">The audience thinks the right answer is the</string>
     <string name="pref_file">es.serpat.wwtbam_preferences</string>
     <string name="understood">UNDERSTOOD</string>
