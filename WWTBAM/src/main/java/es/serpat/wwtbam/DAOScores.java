@@ -58,8 +58,8 @@ public class DAOScores {
                 + " = " + id, null);
     }
 
-    public List<Score> getAllScores() {
-        List<Score> scoreList = new ArrayList<Score>();
+    public ArrayList<Score> getAllScores() {
+        ArrayList<Score> scoreList = new ArrayList<Score>();
 
         Cursor cursor = database.query(SQLHelper.TABLE_SCORES,
                 allColumns, null, null, null, null, null);

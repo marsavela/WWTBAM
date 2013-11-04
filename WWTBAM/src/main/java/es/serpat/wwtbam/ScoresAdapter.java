@@ -3,46 +3,37 @@ package es.serpat.wwtbam;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /**
  * Created by sergiu on 04/11/13.
  */
-public class ScoresAdapter extends BaseAdapter {
+public class ScoresAdapter extends ArrayAdapter<Score> {
 
-    private List<Score> scores = Collections.emptyList();
+    private ArrayList<Score> scores;
 
-    private final Context context;
-
-    public ScoresAdapter(Context context) {
-        this.context = context;
-    }
-
-    public void updateScores(List<Score> scores) {
+    public ScoresAdapter(Context context, int resource, ArrayList<Score> scores) {
+        super(context, resource, scores);
         this.scores = scores;
-        notifyDataSetChanged();
     }
 
     @Override
-    public int getCount() {
-        return 0;
-    }
+    public View getView(int position, View convertView, ViewGroup parent) {
+        //return super.getView(position, convertView, parent);
 
-    @Override
-    public Object getItem(int i) {
-        return null;
-    }
+        View rootView = super.getView(position, convertView, parent);
+        TextView name = (TextView) rootView.findViewById(R.id.score_name);
+        TextView score = (TextView) rootView.findViewById(R.id.score_score);
 
-    @Override
-    public long getItemId(int i) {
-        return 0;
-    }
+        name.setText(scores.get(position).getName());
+        score.setText(scores.get(position).getScore());
 
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        return null;
+        return rootView;
+
     }
 }

@@ -19,14 +19,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by SergiuDaniel on 13/10/13.
@@ -51,7 +46,7 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.scores);
+        setContentView(R.layout.activity_scores);
 
         // Create the adapter that will return a fragment for each of the three primary sections
         // of the app.
@@ -210,7 +205,7 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
         public localScores() {
         }
 
-        private ArrayList<Map<String, String>> buildData() {
+/*        private ArrayList<Score> buildData() {
             daoScores = new DAOScores(super.getActivity());
             daoScores.open();
             List<Score> scores = daoScores.getAllScores();
@@ -222,7 +217,7 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
             }
 
             return listScores;
-        }
+        }*/
 
         private HashMap<String, String> putData(String name, String score) {
             HashMap<String, String> item = new HashMap<String, String>();
@@ -235,19 +230,26 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
-            ArrayList<Map<String, String>> list = buildData();
+            //ArrayList<Score> scores = buildData();
+
+            //ScoresAdapter adapter = new ScoresAdapter(getActivity(), R.layout.score_row, daoScores.getAllScores());
+            //setListAdapter(adapter);
+
+            /*ArrayList<Map<String, String>> list = buildData();
             String[] from = {"name", "score"};
             int[] to = {android.R.id.text1, android.R.id.text2};
 
             SimpleAdapter adapter = new SimpleAdapter(getActivity().getBaseContext(), list,
                     android.R.layout.simple_list_item_2, from, to);
-            setListAdapter(adapter);
+            setListAdapter(adapter);*/
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.list_score_friends, container, false);
+            ScoresAdapter adapter = new ScoresAdapter(getActivity(), R.layout.score_row, daoScores.getAllScores());
+            setListAdapter(adapter);
+            return inflater.inflate(R.layout.list_scores, container, false);
         }
 
         @Override
@@ -268,7 +270,7 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.list_scores, container, false);
+            return inflater.inflate(R.layout.list_score_friends, container, false);
         }
     }
 
