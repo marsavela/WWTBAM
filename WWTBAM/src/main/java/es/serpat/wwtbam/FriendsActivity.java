@@ -1,8 +1,14 @@
 package es.serpat.wwtbam;
 
 import android.app.ActionBar;
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.FragmentTransaction;
+import android.app.ListActivity;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -17,74 +23,43 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHttpResponse;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by SergiuDaniel on 13/10/13.
  */
-public class FriendsActivity extends FragmentActivity implements ActionBar.TabListener {
+public class FriendsActivity extends ListActivity {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the
-     * three primary sections of the app. We use a {@link android.support.v4.app.FragmentPagerAdapter}
-     * derivative, which will keep every loaded fragment in memory. If this becomes too memory
-     * intensive, it may be best to switch to a {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    AppSectionsPagerAdapter mAppSectionsPagerAdapter;
-
-    /**
-     * The {@link android.support.v4.view.ViewPager} that will display the three primary sections of the app, one at a
-     * time.
-     */
-    ViewPager mViewPager;
+    final Context context = this;
+    private String friend_name;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.friends);
+        String[] values = new String[]{"Android", "iPhone", "WindowsMobile",
+                "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
+                "Linux", "OS/2"};
 
-        // Create the adapter that will return a fragment for each of the three primary sections
-        // of the app.
-        mAppSectionsPagerAdapter = new AppSectionsPagerAdapter(getSupportFragmentManager());
-
-        // Set up the action bar.
-        final ActionBar actionBar = getActionBar();
-
-        // Specify that the Home button should show an "Up" caret, indicating that touching the
-        // button will take the user one step up in the application's hierarchy.
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
-        // Specify that the Home/Up button should not be enabled, since there is no hierarchical
-        // parent.
-        //actionBar.setHomeButtonEnabled(false);
-
-        // Specify that we will be displaying tabs in the action bar.
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-        // Set up the ViewPager, attaching the adapter and setting up a listener for when the
-        // user swipes between sections.
-        mViewPager = (ViewPager) findViewById(R.id.friends);
-        mViewPager.setAdapter(mAppSectionsPagerAdapter);
-        mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                // When swiping between different app sections, select the corresponding tab.
-                // We can also use ActionBar.Tab#select() to do this if we have a reference to the
-                // Tab.
-                actionBar.setSelectedNavigationItem(position);
-            }
-        });
-
-        // For each of the sections in the app, add a tab to the action bar.
-        for (int i = 0; i < mAppSectionsPagerAdapter.getCount(); i++) {
-            // Create a tab with text corresponding to the page title defined by the adapter.
-            // Also specify this Activity object, which implements the TabListener interface, as the
-            // listener for when this tab is selected.
-            actionBar.addTab(
-                    actionBar.newTab()
-                            .setText(mAppSectionsPagerAdapter.getPageTitle(i))
-                            .setTabListener(this));
-        }
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(FriendsActivity.this,
+                android.R.layout.simple_list_item_1, values);
+        setListAdapter(adapter);
     }
 
     @Override
@@ -104,128 +79,142 @@ public class FriendsActivity extends FragmentActivity implements ActionBar.TabLi
                 // use NavUtils in the Support Package to ensure proper handling of Up.
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
+            case R.id.add_new_friend:
+                add_new_friend();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-    }
 
-    @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        // When the given tab is selected, switch to the corresponding page in the ViewPager.
-        mViewPager.setCurrentItem(tab.getPosition());
-    }
 
-    @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-    }
+    private void add_new_friend() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+        alert.setTitle(R.string.action_addFriend); //Set Alert dialog title here
+        alert.setMessage("Enter Your Friends Name Here"); //Message here
 
-    /**
-     * A {@link android.support.v4.app.FragmentPagerAdapter} that returns a fragment corresponding to one of the primary
-     * sections of the app.
-     */
-    public class AppSectionsPagerAdapter extends FragmentPagerAdapter {
+        // Set an EditText view to get user input
+        final EditText input = new EditText(context);
+        alert.setView(input);
 
-        public AppSectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
 
-        @Override
-        public Fragment getItem(int i) {
-            switch (i) {
-                case 0:
-                    // The first section of the app is the most interesting -- it offers
-                    // a launchpad into the other demonstrations in this example application.
-                    return new friendsIHave();
 
-                default:
-                    // Show all users
-                    return new allUsers();
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //You will get as string input data in this variable.
+                // here we convert the input to a string and show in a toast.
+                friend_name = input.getEditableText().toString();
+                Toast.makeText(context, friend_name, Toast.LENGTH_LONG).show();
+
             }
-        }
-
-        @Override
-        public int getCount() {
-            return 2;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return getString(R.string.friends);
-                case 1:
-                    return getString(R.string.users);
-                default:
-                    return "wrong";
+        }); //End of alert.setPositiveButton
+        alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // Canceled.
+                dialog.cancel();
             }
+        }); //End of alert.setNegativeButton
+        AlertDialog alertDialog = alert.create();
+        alertDialog.show();
+
+        HttpClient client = new DefaultHttpClient();
+        HttpPost request = new HttpPost("http://wwtbamandroid.appspot.com/rest/friends");
+        List<NameValuePair> pairs = new ArrayList<NameValuePair>();
+        pairs.add(new BasicNameValuePair("name", PreferenceManager.getDefaultSharedPreferences(context).
+                getString(context.getResources().getString(R.string.SHARED_PREF_NAME_KEY),
+                        context.getResources().getString(R.string.default_user_name))));
+        pairs.add(new BasicNameValuePair("friend_name", friend_name));
+
+        try {
+            request.setEntity(new UrlEncodedFormEntity(pairs));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
-    }
-
-    /**
-     * A fragment that launches other parts of the demo application.
-     */
-    public static class friendsIHave extends ListFragment {
-
-        String[] values = new String[]{"Android", "iPhone", "WindowsMobile",
-                "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-                "Linux", "OS/2"};
-
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getBaseContext(),
-                    android.R.layout.simple_list_item_1, values);
-            setListAdapter(adapter);
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.list_friends, container, false);
+        try {
+            HttpResponse response = (BasicHttpResponse) client.execute(request);
+   //         HttpResponse response = client.execute(request);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        @Override
-        public void onListItemClick(ListView l, View v, int position, long id) {
-            super.onListItemClick(l, v, position, id);
-            Toast.makeText(getActivity(), getListView().getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
-        }
 
     }
 
-    /**
-     * A fragment that launches other parts of the demo application.
-     */
-    public static class allUsers extends ListFragment {
-
-        String[] values = new String[]{"Android", "iPhone", "WindowsMobile",
-                "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-                "Linux", "OS/2"};
-
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getBaseContext(),
-                    android.R.layout.simple_list_item_1, values);
-            setListAdapter(adapter);
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            return inflater.inflate(R.layout.list_friends, container, false);
-        }
-
-        @Override
-        public void onListItemClick(ListView l, View v, int position, long id) {
-            super.onListItemClick(l, v, position, id);
-            Toast.makeText(getActivity(), getListView().getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
-        }
-
-    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case android.R.id.home:
+//                // This is called when the Home (Up) button is pressed in the action bar.
+//                // Create a simple intent that starts the hierarchical parent activity and
+//                // use NavUtils in the Support Package to ensure proper handling of Up.
+//                NavUtils.navigateUpFromSameTask(this);
+//                return true;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
+//
+//    @Override
+//    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+//    }
+//
+//    @Override
+//    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+//        // When the given tab is selected, switch to the corresponding page in the ViewPager.
+//        mViewPager.setCurrentItem(tab.getPosition());
+//    }
+//
+//    @Override
+//    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+//    }
+//
+//    /**
+//     * A {@link android.support.v4.app.FragmentPagerAdapter} that returns a fragment corresponding to one of the primary
+//     * sections of the app.
+//     */
+//    public class AppSectionsPagerAdapter extends FragmentPagerAdapter {
+//
+//        public AppSectionsPagerAdapter(FragmentManager fm) {
+//            super(fm);
+//        }
+//
+//
+//
+//
+//    }
+//
+//    /**
+//     * A fragment that launches other parts of the demo application.
+//     */
+//    public static class friendsIHave extends ListFragment {
+//
+//        String[] values = new String[]{"Android", "iPhone", "WindowsMobile",
+//                "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
+//                "Linux", "OS/2"};
+//
+//        @Override
+//        public void onCreate(Bundle savedInstanceState) {
+//            super.onCreate(savedInstanceState);
+//
+//            ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getBaseContext(),
+//                    android.R.layout.simple_list_item_1, values);
+//            setListAdapter(adapter);
+//        }
+//
+//        @Override
+//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                                 Bundle savedInstanceState) {
+//            return inflater.inflate(R.layout.list_friends, container, false);
+//        }
+//
+//        @Override
+//        public void onListItemClick(ListView l, View v, int position, long id) {
+//            super.onListItemClick(l, v, position, id);
+//            Toast.makeText(getActivity(), getListView().getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
+//        }
+//
+//    }
+//
+//
 
 }

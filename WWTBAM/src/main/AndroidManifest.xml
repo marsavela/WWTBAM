@@ -56,16 +56,18 @@
         <activity
             android:name=".FriendsActivity"
             android:label="@string/friends"
-            android:parentActivityName="es.serpat.wwtbam.Preferences">
+            android:parentActivityName="es.serpat.wwtbam.PreferencesActivity">
             <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="es.serpat.wwtbam.Preferences" />
+                android:value="es.serpat.wwtbam.PreferencesActivity" />
             <intent-filter>
                 <action android:name="es.serpat.wwtbam.Friends" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <uses-permission android:name="android.permission.INTERNET" />
     </application>
 
 </manifest>

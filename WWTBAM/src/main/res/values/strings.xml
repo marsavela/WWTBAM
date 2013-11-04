@@ -56,4 +56,8 @@
     <string name="SHARED_PREF_GAME">isGameSaved</string>
     <string name="SHARED_PREF_QUESTION_NUMBER">questionNumber</string>
 
+
+    <string name="username_hint"></string>
+    <string name="password_hint"></string>
+
 </resources>
