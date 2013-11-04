@@ -221,9 +221,6 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
                 listScores.add(putData(sc.getName(),Integer.toString(sc.getScore())));
             }
 
-            //listScores.add(putData("Android", "3000"));
-            //listScores.add(putData("Windows7", "5000"));
-            //listScores.add(putData("iPhone", "65454"));
             return listScores;
         }
 
