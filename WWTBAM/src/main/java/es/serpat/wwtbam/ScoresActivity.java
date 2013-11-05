@@ -1,9 +1,8 @@
 package es.serpat.wwtbam;
 
 import android.app.ActionBar;
-import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.app.FragmentTransaction;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -12,7 +11,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -28,7 +26,7 @@ import java.util.List;
 /**
  * Created by SergiuDaniel on 13/10/13.
  */
-public class ScoresActivity extends FragmentActivity implements ActionBar.TabListener {
+public class ScoresActivity extends FragmentActivity implements ActionBar.TabListener, OnClickAlertDialogFragmentTwoChoices {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the
@@ -123,22 +121,13 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
     }
 
     private void confirmDeletion() {
-        //TODO Hay que actualizar el adapter para que al borrar la base de datos, actualice la vista.
-        //Tambien cambiar AlertDialogFragmentTwoChoices para que funcione aqui tambien.
-        new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_delete)
-                .setTitle(getString(R.string.delete_scores))
-                .setMessage(getString(R.string.delete_scores_confirmation))
-                .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        deleteDB();
-                        adapter.updateAdapter();
-                    }
-
-                })
-                .setNegativeButton(getString(R.string.no), null)
-                .show();
+        DialogFragment fragment = AlertDialogFragmentTwoChoices.newInstance(this,
+                getString(R.string.delete_scores),
+                getString(R.string.delete_scores_confirmation),
+                getString(R.string.no),
+                getString(R.string.yes));
+        fragment.setCancelable(false);
+        fragment.show(getFragmentManager(), "rightDialog");
     }
 
     private void deleteDB() {
@@ -157,6 +146,17 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
 
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    }
+
+    @Override
+    public void doPositiveClick() {
+        deleteDB();
+        adapter.updateAdapter();
+    }
+
+    @Override
+    public void doNegativeClick() {
+
     }
 
     /**

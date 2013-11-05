@@ -1,6 +1,5 @@
 package es.serpat.wwtbam;
 
-import android.app.ActionBar;
 import android.app.DialogFragment;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -25,36 +24,14 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         getFragmentManager().beginTransaction().replace(android.R.id.content,
                 new PrefsFragment()).commit();
 
-        // Set up action bar.
-        final ActionBar actionBar = getActionBar();
-
-        // Specify that the Home button should show an "Up" caret, indicating that touching the
-        // button will take the user one step up in the application's hierarchy.
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-
         if (PreferenceManager.getDefaultSharedPreferences(this)
                 .getBoolean(getResources().getString(R.string.SHARED_PREF_GAME), true) &&
                 PreferenceManager.getDefaultSharedPreferences(this)
                         .getInt(getResources().getString(R.string.SHARED_PREF_QUESTION_NUMBER), 0) > 0 &&
                 savedInstanceState == null) {
             DialogFragment fragment = AlertDialogFragmentOneChoice.newInstance(
-                    getString(R.string.you_lost), getString(R.string.try_again));
-            fragment.show(getFragmentManager(), "wrongDialog");
-            /*
-            new AlertDialog.Builder(this)
-                    .setIcon(android.R.drawable.ic_menu_help)
-                    .setTitle(getString(R.string.sorry))
-                    .setMessage(getString(R.string.sorry_message))
-                    .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // The 'which' argument contains the index position
-                            // of the selected item
-                        }
-                    })
-                    .show();*/
+                    getString(R.string.attention), getString(R.string.start_new_game_message));
+            fragment.show(getFragmentManager(), "attentionDialog");
         }
     }
 
@@ -100,7 +77,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
         }
     }
 
-    public static class PrefsFragment extends PreferenceFragment {
+    public static class  PrefsFragment extends PreferenceFragment {
 
         @Override
         public void onCreate(Bundle savedInstanceState) {

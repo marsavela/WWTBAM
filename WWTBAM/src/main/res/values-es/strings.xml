@@ -49,5 +49,7 @@
     <string name="users">TODOS LOS USUARIOS</string>
     <string name="yes">Si</string>
     <string name="you_lost">Ha perdido</string>
+    <string name="attention">Attention</string>
+    <string name="start_new_game_message">You\'re already playing a game. If you change the settings, you\'ll lose the game.</string>
 
 </resources>

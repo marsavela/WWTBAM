@@ -2,9 +2,7 @@ package es.serpat.wwtbam;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DialogFragment;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -13,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -37,10 +34,6 @@ public class PlayActivity extends Activity implements OnClickAlertDialogFragment
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         game = new Game(this);
-        //SharedPreferences preferences = this.getSharedPreferences(getResources().getString(R.string.pref_file), Context.MODE_PRIVATE);
-
-        //if (game.isGameSaved())
-        //game.restoreGameData();
 
         Initialization();
 
@@ -64,15 +57,12 @@ public class PlayActivity extends Activity implements OnClickAlertDialogFragment
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
             case R.id.action_play_joker:
-                //showDialog();
                 if (game.areJokersLeft()) {
-                    //showAvailableJokers();
                     DialogFragment fragment = AlertDialogFragmentList.newInstance(this, game.getAllowedJokers());
                     fragment.show(getFragmentManager(), "list_of_jokers");
                 } else {
                     DialogFragment fragment = AlertDialogFragmentOneChoice.newInstance(getString(R.string.sorry), getString(R.string.sorry_message));
                     fragment.show(getFragmentManager(), "noAvailableJokers");
-                    //showAlertNoAvailableJokers();
                 }
                 return true;
             case R.id.action_play_end_game:
@@ -87,11 +77,6 @@ public class PlayActivity extends Activity implements OnClickAlertDialogFragment
     @Override
     protected void onResume() {
         super.onResume();
-
-        /*if (game.shouldFinish()) {
-            game.setShouldNotFinish();
-            finish();
-        }*/
 
         if (game.getActualQuestion() == 0 && !game.isGameSaved())
             drawActualQuestion();
@@ -208,101 +193,25 @@ public class PlayActivity extends Activity implements OnClickAlertDialogFragment
         d.setVisibility(View.VISIBLE);
     }
 
-    private void showAlertNoAvailableJokers() {
-        new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_menu_help)
-                .setTitle(getString(R.string.sorry))
-                .setMessage(getString(R.string.sorry_message))
-                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // The 'which' argument contains the index position
-                        // of the selected item
-                    }
-                })
-                .show();
-    }
-
-    private void showAvailableJokers() {
-        new AlertDialog.Builder(this).setTitle(R.string.pick_joker)
-                .setAdapter(new ArrayAdapter<String>(
-                        this,
-                        android.R.layout.simple_list_item_1,
-                        game.getAllowedJokers()), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // The 'which' argument contains the index position
-                        // of the selected item
-                        game.askForJoker(game.getJokerName(which));
-                    }
-                }).show();
-    }
-
     public void questionAnswered(String s) {
         if (s.equals("win")) {
             DialogFragment fragment = AlertDialogFragmentOneChoice.newInstance(
                     getString(R.string.congratulations), getString(R.string.congratulations_message));
             fragment.setCancelable(false);
             fragment.show(getFragmentManager(), "winDialog");
-            /*new AlertDialog.Builder(this)
-                    .setIcon(android.R.drawable.star_on)
-                    .setCancelable(false)
-                    .setTitle(getString(R.string.congratulations))
-                    .setMessage(getString(R.string.congratulations_message))
-                    .setNeutralButton(getString(R.string.finish), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-
-                    })
-                    .show();*/
         } else if (s.equals("right")) {
-            //TODO Hacer un Dialog propio para que no pete cuando gira la pantalla.
             DialogFragment fragment = AlertDialogFragmentTwoChoices.newInstance(this,
                     getString(R.string.right),
-                    getString(R.string.right_message));
+                    getString(R.string.right_message),
+                    getString(R.string.give_up),
+                    getString(R.string.next));
             fragment.setCancelable(false);
             fragment.show(getFragmentManager(), "rightDialog");
-            /*new AlertDialog.Builder(this)
-                    .setIcon(R.drawable.btn_check_on)
-                    .setCancelable(false)
-                    .setTitle(getString(R.string.right))
-                    .setMessage(getString(R.string.right_message))
-                    .setPositiveButton(getString(R.string.next), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            drawActualQuestion();
-                        }
-
-                    })
-                    .setNegativeButton(getString(R.string.give_up), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            game.saveScore();
-                            game.setUnsavedGame();
-                            finish();
-                        }
-
-                    })
-                    .show();*/
         } else if (s.equals("wrong")) {
             DialogFragment fragment = AlertDialogFragmentOneChoice.newInstance(
                     getString(R.string.you_lost), "wrong");
             fragment.setCancelable(false);
             fragment.show(getFragmentManager(), "wrongDialog");
-            /*new AlertDialog.Builder(this)
-                    .setIcon(android.R.drawable.ic_delete)
-                    .setCancelable(false)
-                    .setTitle(getString(R.string.you_lost))
-                    .setMessage(getString(R.string.try_again))
-                    .setNeutralButton(getString(R.string.understood), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-
-                    })
-                    .show();*/
         }
     }
 
@@ -338,33 +247,11 @@ public class PlayActivity extends Activity implements OnClickAlertDialogFragment
     public void showPhoneCallAnswer(String phoneAnswer) {
         DialogFragment fragment = AlertDialogFragmentOneChoice.newInstance(phoneAnswer, getString(R.string.phone_message));
         fragment.show(getFragmentManager(), "jokerPhoneAnswer");
-        /*new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_menu_call)
-                .setTitle(getString(R.string.phone))
-                .setMessage(getString(R.string.phone_message) + " " + phoneAnswer + "\"")
-                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-
-                })
-                .show();*/
     }
 
     public void showAudienceAnswer(String audienceAnswer) {
         DialogFragment fragment = AlertDialogFragmentOneChoice.newInstance(audienceAnswer, getString(R.string.audience_message));
         fragment.show(getFragmentManager(), "jokerAudienceAnswer");
-        /*new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_menu_call)
-                .setTitle(getString(R.string.audience))
-                .setMessage(getString(R.string.audience_message) + " " + audienceAnswer + "\"")
-                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-
-                })
-                .show();*/
     }
 
     @Override
