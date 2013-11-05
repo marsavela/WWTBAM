@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,7 +22,8 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.util.HashMap;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by SergiuDaniel on 13/10/13.
@@ -43,6 +45,7 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
     ViewPager mViewPager;
 
     private static DAOScores daoScores;
+    private static ScoresAdapter adapter;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,6 +133,7 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         deleteDB();
+                        adapter.updateAdapter();
                     }
 
                 })
@@ -205,49 +209,14 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
         public localScores() {
         }
 
-/*        private ArrayList<Score> buildData() {
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
             daoScores = new DAOScores(super.getActivity());
             daoScores.open();
             List<Score> scores = daoScores.getAllScores();
             Collections.sort(scores);
-
-            ArrayList<Map<String, String>> listScores = new ArrayList<Map<String, String>>();
-            for (Score sc : scores) {
-                listScores.add(putData(sc.getName(),Integer.toString(sc.getScore())));
-            }
-
-            return listScores;
-        }*/
-
-        private HashMap<String, String> putData(String name, String score) {
-            HashMap<String, String> item = new HashMap<String, String>();
-            item.put("name", name);
-            item.put("score", score);
-            return item;
-        }
-
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-
-            //ArrayList<Score> scores = buildData();
-
-            //ScoresAdapter adapter = new ScoresAdapter(getActivity(), R.layout.score_row, daoScores.getAllScores());
-            //setListAdapter(adapter);
-
-            /*ArrayList<Map<String, String>> list = buildData();
-            String[] from = {"name", "score"};
-            int[] to = {android.R.id.text1, android.R.id.text2};
-
-            SimpleAdapter adapter = new SimpleAdapter(getActivity().getBaseContext(), list,
-                    android.R.layout.simple_list_item_2, from, to);
-            setListAdapter(adapter);*/
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            ScoresAdapter adapter = new ScoresAdapter(getActivity(), R.layout.score_row, daoScores.getAllScores());
+            adapter = new ScoresAdapter(getActivity(),scores);
             setListAdapter(adapter);
             return inflater.inflate(R.layout.list_scores, container, false);
         }

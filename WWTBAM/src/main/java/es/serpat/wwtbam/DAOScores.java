@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,8 +59,8 @@ public class DAOScores {
                 + " = " + id, null);
     }
 
-    public ArrayList<Score> getAllScores() {
-        ArrayList<Score> scoreList = new ArrayList<Score>();
+    public List<Score> getAllScores() {
+        List<Score> scoreList = new ArrayList<Score>();
 
         Cursor cursor = database.query(SQLHelper.TABLE_SCORES,
                 allColumns, null, null, null, null, null);
@@ -72,6 +73,7 @@ public class DAOScores {
         }
         // make sure to close the cursor
         cursor.close();
+        Log.v("PRUEBAAAAA", Integer.toString(scoreList.size()));
         return scoreList;
     }
 
