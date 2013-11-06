@@ -17,21 +17,6 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
-    <style name="textWWTBAM">
-        <item name="android:layout_width">fill_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">40sp</item>
-        <item name="android:layout_gravity">center</item>
-        <item name="android:layout_marginBottom">25dp</item>
-        <item name="android:gravity">center</item>
-    </style>
-
-    <style name="button">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_gravity">center</item>
-    </style>
-
     <style name="buttonColor">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
