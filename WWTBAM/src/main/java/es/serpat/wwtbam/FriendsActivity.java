@@ -154,42 +154,6 @@ public class FriendsActivity extends ListActivity  {
 
     }
 
-    private void post_friend() {
-
-
-        HttpClient client = new DefaultHttpClient();
-        HttpPost request = new HttpPost("http://wwtbamandroid.appspot.com/rest/friends");
-        List<NameValuePair> pairs = new ArrayList<NameValuePair>();
-        pairs.add(new BasicNameValuePair("name", name));
-        pairs.add(new BasicNameValuePair("friend_name", friend_name));
-
-        try {
-            request.setEntity(new UrlEncodedFormEntity(pairs));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        try {
-//            HttpResponse response = (BasicHttpResponse) client.execute(request);
-            HttpResponse response = client.execute(request);
-            HttpEntity entity = response.getEntity();
-            if (entity != null) {
-                InputStream stream = entity.getContent(); BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(stream)); StringBuilder sb = new StringBuilder();
-                String line = null;
-                while ((line = reader.readLine()) != null) {
-                    sb.append(line + "\n");
-                }
-                stream.close();
-                String responseString = sb.toString();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-
-
     private class MyTask extends AsyncTask<Void, Integer, Boolean> {
 
         @Override
@@ -240,59 +204,6 @@ public class FriendsActivity extends ListActivity  {
             // Change something in the interface
         }
     }
-
-
-
-        final Handler handle = new Handler();
-
-    protected void miThread(){
-        Thread t = new Thread(){
-            public void run(){
-                try{
-                    Thread.sleep(10000);
-
-                }catch(InterruptedException e){
-                    e.printStackTrace();
-                }
-                if (isConnected()) {
-    //                handle.post(proceso);
-                }
-                else {
-                    Toast.makeText(getParent(), getResources().getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        };
-        t.start();
-    }
-
-    final Runnable proceso = new Runnable(){
-        public void run(){
-
-            List<NameValuePair> pairs = new ArrayList<NameValuePair>();
-            pairs.add(new BasicNameValuePair("name", "Patrick"));
-            pairs.add(new BasicNameValuePair("friend_name", "Sergiu"));
-
-
-            try {
-                URL url = new URL("http://wwtbamandroid.appspot.com/rest/friends");
-                HttpURLConnection connection =(HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("POST");
-                connection.setDoOutput(true);
-			    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "UTF-8"));
-                writer.write(URLEncodedUtils.format(pairs, "UTF-8"));
-                writer.close();
-
-                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            } catch (MalformedURLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-    };
 
     public boolean isConnected() {
         ConnectivityManager manager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
