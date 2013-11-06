@@ -58,6 +58,8 @@
 
 
     <string name="username_hint"></string>
+    <string name="error_friend_name">Error with Friend name</string>
+    <string name="error_friend_name_text">Friend name empty</string>
     <string name="password_hint"></string>
     <string name="attention">Attention</string>
     <string name="start_new_game_message">You\'re already playing a game. If you change the settings, you\'ll lose the game.</string>
