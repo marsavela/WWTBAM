@@ -145,7 +145,12 @@ public class Game extends FragmentActivity {
                 getString(activity.getResources().getString(R.string.SHARED_PREF_NAME_KEY),
                         activity.getResources().getString(R.string.default_user_name)), score);
         daoScores.close();
+
+
+
     }
+
+
 
     public void askForJoker(String joker) {
         if (joker.equals(activity.getResources().getString(R.string.phone))) {
