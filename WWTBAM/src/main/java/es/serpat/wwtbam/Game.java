@@ -129,9 +129,9 @@ public class Game extends FragmentActivity {
                 getString(activity.getResources().getString(R.string.SHARED_PREF_NAME_KEY),
                         activity.getResources().getString(R.string.default_user_name)), score);
         daoScores.close();
-        //activity.sendScore(PreferenceManager.getDefaultSharedPreferences(activity).
-          //      getString(activity.getResources().getString(R.string.SHARED_PREF_NAME_KEY),
-            //            activity.getResources().getString(R.string.default_user_name)),score);
+        activity.sendScore(PreferenceManager.getDefaultSharedPreferences(activity).
+                getString(activity.getResources().getString(R.string.SHARED_PREF_NAME_KEY),
+                        activity.getResources().getString(R.string.default_user_name)),score);
     }
 
     public void askForJoker(String joker) {

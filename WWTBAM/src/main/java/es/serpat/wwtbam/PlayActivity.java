@@ -3,15 +3,11 @@ package es.serpat.wwtbam;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DialogFragment;
-import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,34 +15,20 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.gson.Gson;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-
-import javax.net.ssl.HttpsURLConnection;
 
 /**
  * Created by SergiuDaniel on 15/10/13.
@@ -288,9 +270,9 @@ public class PlayActivity extends Activity implements OnClickAlertDialogFragment
         fragment.show(getFragmentManager(), "jokerAudienceAnswer");
     }
 
-    public void sendScore(int score) {
+    public void sendScore(String name, int score) {
         if (isConnected()) {
-            ScoreTask task = new ScoreTask(score);
+            ScoreTask task = new ScoreTask(name, score);
             task.execute();
         }
         else {
@@ -300,29 +282,20 @@ public class PlayActivity extends Activity implements OnClickAlertDialogFragment
 
     private class ScoreTask extends AsyncTask<Void, Void, Void>{
 
-        Context context;
-
+        String name;
         int score;
 
-        public ScoreTask(int score) {
+        public ScoreTask(String name, int score) {
+            this.name = name;
             this.score = score;
         }
 
         @Override
-        protected void onPreExecute() {
-            // TODO Auto-generated method stub
-            setProgressBarIndeterminateVisibility(true);
-        }
-
-        @Override
         protected Void doInBackground(Void... params) {
-            try {/*
-                PreferenceManager.getDefaultSharedPreferences(context).
-                        getString(context.getResources().getString(R.string.SHARED_PREF_NAME_KEY),
-                                context.getResources().getString(R.string.default_user_name));*/
+            try {
                 ArrayList<NameValuePair> list = new ArrayList<NameValuePair>();
-                list.add(new BasicNameValuePair("name", "Sergiu"));
-                list.add(new BasicNameValuePair("score", Integer.toString(32001)));
+                list.add(new BasicNameValuePair("name", name));
+                list.add(new BasicNameValuePair("score", Integer.toString(score)));
 
 				/* This is just for POST/PUT operations */
 
@@ -330,24 +303,10 @@ public class PlayActivity extends Activity implements OnClickAlertDialogFragment
 				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 				connection.setRequestMethod("PUT");
 				connection.setDoOutput(true);
-                connection.setDoInput(true);
 				BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "UTF-8"));
 				writer.write(URLEncodedUtils.format(list, "UTF-8"));
 				writer.close();
-                connection.connect();
-
-                Log.v("NOSEEEEE", "Ya he anviado.");
-				BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-
-				/* This was just for POST/PUT operations */
-
-                StringBuffer buffer = new StringBuffer();
-                String s;
-                while ((s = reader.readLine()) != null) {
-                    buffer.append(s);
-                    Log.v("NOSEEEEE", s);
-                }
-                reader.close();
+                connection.getInputStream();
 
             } catch (MalformedURLException e) {
                 // TODO Auto-generated catch block
