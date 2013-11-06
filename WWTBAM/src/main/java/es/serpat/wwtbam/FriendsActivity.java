@@ -167,10 +167,10 @@ public class FriendsActivity extends ListActivity  {
 
 
                     if (isConnected()) {
+
                         List<NameValuePair> pairs = new ArrayList<NameValuePair>();
                         pairs.add(new BasicNameValuePair("name", name));
                         pairs.add(new BasicNameValuePair("friend_name", friend_name));
-
 
                         try {
                             URL url = new URL("http://wwtbamandroid.appspot.com/rest/friends");
@@ -201,6 +201,57 @@ public class FriendsActivity extends ListActivity  {
         @Override
         protected void onProgressUpdate(Integer... values) {
         // TODO Auto-generated method stub
+            // Change something in the interface
+        }
+    }
+
+    private class GetFriendsTask extends AsyncTask<Void, Integer, Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            // TODO Auto-generated method stub
+
+
+            if (isConnected()) {
+
+                List<NameValuePair> pairs = new ArrayList<NameValuePair>();
+                pairs.add(new BasicNameValuePair("name", name));
+                pairs.add(new BasicNameValuePair("friend_name", friend_name));
+
+                try {
+                    URL url = new URL("http://wwtbamandroid.appspot.com/rest/friends");
+                    HttpURLConnection connection =(HttpURLConnection) url.openConnection();
+                    connection.setRequestMethod("POST");
+                    connection.setDoOutput(true);
+                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "UTF-8"));
+                    writer.write(URLEncodedUtils.format(pairs, "UTF-8"));
+                    writer.close();
+
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                } catch (MalformedURLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                //handle.post(proceso);
+            }
+            else {
+                Toast.makeText(getParent(), getResources().getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
+            }
+
+            return true;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            // TODO Auto-generated method stub
             // Change something in the interface
         }
     }
