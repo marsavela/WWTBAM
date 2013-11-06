@@ -3,8 +3,15 @@ package es.serpat.wwtbam;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,7 +19,34 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+
+import javax.net.ssl.HttpsURLConnection;
 
 /**
  * Created by SergiuDaniel on 15/10/13.
@@ -254,6 +288,86 @@ public class PlayActivity extends Activity implements OnClickAlertDialogFragment
         fragment.show(getFragmentManager(), "jokerAudienceAnswer");
     }
 
+    public void sendScore(int score) {
+        if (isConnected()) {
+            ScoreTask task = new ScoreTask(score);
+            task.execute();
+        }
+        else {
+            Toast.makeText(this, getResources().getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private class ScoreTask extends AsyncTask<Void, Void, Void>{
+
+        Context context;
+
+        int score;
+
+        public ScoreTask(int score) {
+            this.score = score;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            // TODO Auto-generated method stub
+            setProgressBarIndeterminateVisibility(true);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {/*
+                PreferenceManager.getDefaultSharedPreferences(context).
+                        getString(context.getResources().getString(R.string.SHARED_PREF_NAME_KEY),
+                                context.getResources().getString(R.string.default_user_name));*/
+                ArrayList<NameValuePair> list = new ArrayList<NameValuePair>();
+                list.add(new BasicNameValuePair("name", "Sergiu"));
+                list.add(new BasicNameValuePair("score", Integer.toString(32001)));
+
+				/* This is just for POST/PUT operations */
+
+				URL url = new URL("http://wwtbamandroid.appspot.com/rest/highscores");
+				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+				connection.setRequestMethod("PUT");
+				connection.setDoOutput(true);
+                connection.setDoInput(true);
+				BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "UTF-8"));
+				writer.write(URLEncodedUtils.format(list, "UTF-8"));
+				writer.close();
+                connection.connect();
+
+                Log.v("NOSEEEEE", "Ya he anviado.");
+				BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+				/* This was just for POST/PUT operations */
+
+                StringBuffer buffer = new StringBuffer();
+                String s;
+                while ((s = reader.readLine()) != null) {
+                    buffer.append(s);
+                    Log.v("NOSEEEEE", s);
+                }
+                reader.close();
+
+            } catch (MalformedURLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+    }
+
+    public boolean isConnected() {
+        ConnectivityManager manager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo info = manager.getActiveNetworkInfo();
+        return ((info != null) && (info.isConnected()));
+    }
+
     @Override
     public void doPositiveClick() {
         drawActualQuestion();
@@ -270,4 +384,5 @@ public class PlayActivity extends Activity implements OnClickAlertDialogFragment
     public void doAskForJoker(int which) {
         game.askForJoker(game.getJokerName(which));
     }
+
 }

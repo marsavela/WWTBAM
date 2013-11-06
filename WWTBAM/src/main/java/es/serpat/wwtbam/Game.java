@@ -112,22 +112,6 @@ public class Game extends FragmentActivity {
             activity.questionAnswered("wrong");
         }
     }
-/*
-    public boolean shouldFinish() {
-        return PreferenceManager.getDefaultSharedPreferences(activity).getBoolean(SHARED_FINISH, false);
-    }
-
-    private void setShouldFinish() {
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(activity).edit();
-        editor.putBoolean(SHARED_FINISH, true);
-        editor.commit();
-    }
-
-    public void setShouldNotFinish() {
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(activity).edit();
-        editor.putBoolean(SHARED_FINISH, false);
-        editor.commit();
-    }*/
 
     public void saveScore() {
         int score;
@@ -145,6 +129,9 @@ public class Game extends FragmentActivity {
                 getString(activity.getResources().getString(R.string.SHARED_PREF_NAME_KEY),
                         activity.getResources().getString(R.string.default_user_name)), score);
         daoScores.close();
+        //activity.sendScore(PreferenceManager.getDefaultSharedPreferences(activity).
+          //      getString(activity.getResources().getString(R.string.SHARED_PREF_NAME_KEY),
+            //            activity.getResources().getString(R.string.default_user_name)),score);
     }
 
     public void askForJoker(String joker) {
