@@ -17,18 +17,23 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * Created by SergiuDaniel on 13/10/13.
@@ -38,19 +43,33 @@ public class FriendsActivity extends ListActivity  {
     final Context context = this;
     private String friend_name;
     private String name;
+    private FriendList friends;
+    private String[] values =new String[]{" "};
+    ArrayAdapter<String> adapter;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.friends);
-        String[] values = new String[]{"Android", "iPhone", "WindowsMobile",
-                "Blackberry", "WebOS", "Ubuntu", "Windows7", "Max OS X",
-                "Linux", "OS/2"};
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(FriendsActivity.this,
+        // We save the Players name. We'll need it later
+        name=PreferenceManager.getDefaultSharedPreferences(context).
+                getString(context.getResources().getString(R.string.SHARED_PREF_NAME_KEY),
+                        context.getResources().getString(R.string.default_user_name));
+
+        // The adapter fills the layout with the values (names of our friends)
+        this.adapter = new ArrayAdapter<String>(FriendsActivity.this,
                 android.R.layout.simple_list_item_1, values);
-        setListAdapter(adapter);
+        setListAdapter(this.adapter);
 
+        // If the devices is connected to the Internet we get our friend's names
+        if (isConnected()) {
+            GetFriendsTask task = new GetFriendsTask();
+            task.execute();
+        }
+        else {
+            Toast.makeText(getParent(), getResources().getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -77,12 +96,14 @@ public class FriendsActivity extends ListActivity  {
         return super.onOptionsItemSelected(item);
     }
 
+    // We add a new friend to our list of friends
     private void add_new_friend() {
 
-        name=PreferenceManager.getDefaultSharedPreferences(context).
-                getString(context.getResources().getString(R.string.SHARED_PREF_NAME_KEY),
-                        context.getResources().getString(R.string.default_user_name));
+//        name=PreferenceManager.getDefaultSharedPreferences(context).
+//                getString(context.getResources().getString(R.string.SHARED_PREF_NAME_KEY),
+//                        context.getResources().getString(R.string.default_user_name));
 
+        // New dialog to enter the name of our new friend
         AlertDialog.Builder alert = new AlertDialog.Builder(context);
         alert.setTitle(R.string.action_addFriend); //Set Alert dialog title here
         alert.setMessage("Enter Your Friends Name Here"); //Message here
@@ -91,16 +112,13 @@ public class FriendsActivity extends ListActivity  {
         final EditText input = new EditText(context);
         alert.setView(input);
 
-
+        // Listener for the "OK" button. If pressed, we save the name of our friend, and post it.
         alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                //You will get as string input data in this variable.
-                // here we convert the input to a string and show in a toast.
                 friend_name = input.getEditableText().toString();
-                Toast.makeText(context, friend_name, Toast.LENGTH_LONG).show();
-
+                Toast.makeText(context, friend_name + " added to your friends!", Toast.LENGTH_LONG).show();
                 if (isConnected()) {
-                    SendFriendTask task = new SendFriendTask();
+                    PostFriendTask task = new PostFriendTask();
                     task.execute();
                 }
                 else {
@@ -120,17 +138,17 @@ public class FriendsActivity extends ListActivity  {
 
     }
 
-    public boolean isConnected() {
-        ConnectivityManager manager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-        NetworkInfo info = manager.getActiveNetworkInfo();
-        return ((info != null) && (info.isConnected()));
-    }
+    // This task posts the name of our new friend and adds it to our list of friends
+    private class PostFriendTask extends AsyncTask<Void, Integer, Boolean> {
 
-    private class SendFriendTask extends AsyncTask<Void, Integer, Boolean> {
+        @Override
+        protected void onPreExecute() {
+            // TODO Auto-generated method stub
+        }
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO Auto-generated method stub
+        // TODO Auto-generated method stub
 
             List<NameValuePair> pairs = new ArrayList<NameValuePair>();
             pairs.add(new BasicNameValuePair("name", name));
@@ -144,7 +162,8 @@ public class FriendsActivity extends ListActivity  {
                 BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream(), "UTF-8"));
                 writer.write(URLEncodedUtils.format(pairs, "UTF-8"));
                 writer.close();
-                connection.getInputStream();
+
+     //esto sobra??           BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             } catch (MalformedURLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -152,10 +171,65 @@ public class FriendsActivity extends ListActivity  {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-
             return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+
+            GetFriendsTask task = new GetFriendsTask();
+            task.execute();
         }
     }
 
+    private class GetFriendsTask extends AsyncTask<Void, Integer, Boolean> {
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            // TODO Auto-generated method stub
+
+                try {
+                    URL url = new URL("http://wwtbamandroid.appspot.com/rest/friends?name="+name);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.setRequestMethod("GET");
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+                    Gson gson = new Gson();
+                    friends = gson.fromJson(reader, FriendList.class);
+                    reader.close();
+
+                    values = friends.getFriends().toArray(new String[friends.getFriends().size()]);
+
+                } catch (MalformedURLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+
+   //         adapter.notifyDataSetChanged();
+            // We add all the names of our friends to the friends layout
+            final ArrayAdapter<String> adapter = new ArrayAdapter<String>(FriendsActivity.this,
+                    android.R.layout.simple_list_item_1, values);
+            setListAdapter(adapter);
+        }
+    }
+
+    // Here we check if our device is connected to the Internet
+    public boolean isConnected() {
+        ConnectivityManager manager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo info = manager.getActiveNetworkInfo();
+        return ((info != null) && (info.isConnected()));
+    }
 }
 
