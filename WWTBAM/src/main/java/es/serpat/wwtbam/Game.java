@@ -18,11 +18,6 @@ import java.util.List;
  */
 public class Game extends FragmentActivity {
 
-    //private static final String SHARED_FINISH = "gameShouldFinish";
-    //Constants for saved data.
-    //private String SHARED_PREF_GAME = "isGameSaved";
-    //private String SHARED_PREF_QUESTION_NUMBER = getString(R.string.SHARED_PREF_QUESTION_NUMBER);
-    //private String SHARED_PREF_NAME_KEY = "playerName";
     private String SHARED_PREF_AUDIENCE = "isUsedAudienceJoker";
     private String SHARED_PREF_FIFTY_USED = "questionFiftyJokerWereUsed";
     private String SHARED_PREF_FIFTY = "isUsedFiftyJoker";
@@ -37,8 +32,6 @@ public class Game extends FragmentActivity {
     private boolean isUsedPhoneJoker;
 
     private boolean isGameSaved;
-
-    private String playerName;
 
     private PlayActivity activity;
 
@@ -99,7 +92,6 @@ public class Game extends FragmentActivity {
             if (actualQuestion >= questionList.size() - 1) {
                 setUnsavedGame();
                 saveScore();
-                //setShouldFinish();
                 activity.questionAnswered("win");
             } else {
                 actualQuestion++;
@@ -108,7 +100,6 @@ public class Game extends FragmentActivity {
         } else {
             setUnsavedGame();
             saveScore();
-            //setShouldFinish();
             activity.questionAnswered("wrong");
         }
     }
@@ -153,8 +144,6 @@ public class Game extends FragmentActivity {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putInt(activity.getResources().getString(R.string.SHARED_PREF_QUESTION_NUMBER), actualQuestion);
-        editor.putString(activity.getResources().getString(R.string.SHARED_PREF_NAME_KEY), playerName);
-        //editor.putString(SHARED_PREF_NAME_KEY, playerName);
         editor.putBoolean(SHARED_PREF_PHONE, isUsedPhoneJoker);
         editor.putBoolean(SHARED_PREF_FIFTY, isUsedFiftyJoker);
         editor.putInt(SHARED_PREF_FIFTY_USED, questionFiftyJokerWereUsed);
@@ -165,9 +154,6 @@ public class Game extends FragmentActivity {
     public void restoreGameData() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
         actualQuestion = sharedPref.getInt(activity.getResources().getString(R.string.SHARED_PREF_QUESTION_NUMBER), 0);
-        playerName = sharedPref.getString(activity.getResources().getString(R.string.SHARED_PREF_NAME_KEY),
-                activity.getResources().getString(R.string.default_user_name));
-        //playerName = sharedPref.getString(SHARED_PREF_NAME_KEY, activity.getResources().getString(R.string.default_user_name));
         isUsedPhoneJoker = sharedPref.getBoolean(SHARED_PREF_PHONE, false);
         isUsedFiftyJoker = sharedPref.getBoolean(SHARED_PREF_FIFTY, false);
         questionFiftyJokerWereUsed = sharedPref.getInt(SHARED_PREF_FIFTY_USED, -1);
@@ -185,7 +171,8 @@ public class Game extends FragmentActivity {
 
     public boolean areJokersLeft() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(activity);
-        return (3 - getAllowedJokers().length) < Integer.parseInt(sharedPref.getString(activity.getResources().getString(R.string.SHARED_PREF_NUM_JOKERS), "3"));
+        return (3 - getAllowedJokers().length) < Integer.parseInt(sharedPref.getString(
+                activity.getResources().getString(R.string.SHARED_PREF_NUM_JOKERS), "3"));
     }
 
     public List<Question> getQuestionList() {

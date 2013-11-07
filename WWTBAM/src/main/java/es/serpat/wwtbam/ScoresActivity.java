@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.ListFragment;
-import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -96,40 +95,6 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.scores_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                // This is called when the Home (Up) button is pressed in the action bar.
-                // Create a simple intent that starts the hierarchical parent activity and
-                // use NavUtils in the Support Package to ensure proper handling of Up.
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
-            case R.id.action_scores:
-                confirmDeletion();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void confirmDeletion() {
-        DialogFragment fragment = AlertDialogFragmentTwoChoices.newInstance(this,
-                getString(R.string.delete_scores),
-                getString(R.string.delete_scores_confirmation),
-                getString(R.string.no),
-                getString(R.string.yes));
-        fragment.setCancelable(false);
-        fragment.show(getFragmentManager(), "rightDialog");
-    }
-
     private void deleteDB() {
         daoScores.deleteDB(super.getBaseContext());
     }
@@ -146,6 +111,16 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
 
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    }
+
+    private void confirmDeletion() {
+        DialogFragment fragment = AlertDialogFragmentTwoChoices.newInstance(this,
+                getString(R.string.delete_scores),
+                getString(R.string.delete_scores_confirmation),
+                getString(R.string.no),
+                getString(R.string.yes));
+        fragment.setCancelable(false);
+        fragment.show(getFragmentManager(), "rightDialog");
     }
 
     @Override
@@ -204,9 +179,15 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
     /**
      * A fragment that launches other parts of the demo application.
      */
-    public static class localScores extends ListFragment {
+    public class localScores extends ListFragment {
 
         public localScores() {
+        }
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setHasOptionsMenu(true);
         }
 
         @Override
@@ -225,6 +206,29 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
         public void onListItemClick(ListView l, View v, int position, long id) {
             super.onListItemClick(l, v, position, id);
             Toast.makeText(getActivity(), getListView().getItemAtPosition(position).toString(), Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+            // Inflate the menu items for use in the action bar
+            inflater.inflate(R.menu.scores_menu, menu);
+            super.onCreateOptionsMenu(menu, inflater);
+        }
+
+        @Override
+        public boolean onOptionsItemSelected(MenuItem item) {
+            switch (item.getItemId()) {
+                /*case android.R.id.home:
+                    // This is called when the Home (Up) button is pressed in the action bar.
+                    // Create a simple intent that starts the hierarchical parent activity and
+                    // use NavUtils in the Support Package to ensure proper handling of Up.
+                    NavUtils.navigateUpFromSameTask(this);
+                    return true;*/
+                case R.id.action_scores:
+                    confirmDeletion();
+                    return true;
+            }
+            return super.onOptionsItemSelected(item);
         }
     }
 
