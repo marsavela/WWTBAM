@@ -11,7 +11,7 @@
     <string name="about">CREDITS</string>
     <string name="low_about">Credits</string>
     <string name="main">MAIN</string>
-    <string name="about_text">This app was made for ADM. Sergiu Daniel Marsavela and Patrick Mondria Simoes.</string>
+    <string name="about_text">This app was made for ADM by Sergiu Daniel Marsavela and Patrick Mondria Simoes.</string>
     <string name="pref_title_help">Number of helps</string>
     <string name="pref_help_summary">Select how many times you can ask for help.</string>
     <string name="pref_name_summary">Introduce your name.</string>

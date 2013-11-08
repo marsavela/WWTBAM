@@ -5,5 +5,5 @@
     <item
         android:id="@+id/add_new_friend"
         android:title="@string/action_addFriend"
-        android:showAsAction="always" />
+        android:showAsAction="always"/>
 </menu>
