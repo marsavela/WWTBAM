@@ -22,6 +22,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.Toast;
@@ -50,11 +51,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by SergiuDaniel on 13/10/13.
  */
-public class ScoresActivity extends FragmentActivity implements ActionBar.TabListener, OnClickAlertDialogFragmentTwoChoices {
+public class ScoresActivity extends FragmentActivity implements ActionBar.TabListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the
@@ -75,6 +78,7 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_scores);
 
         // Create the adapter that will return a fragment for each of the three primary sections
@@ -123,10 +127,6 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
         }
 
     }
-
-    /*private static void deleteDB() {
-        daoScores.deleteDB(super.getBaseContext());
-    }*/
 
     @Override
     public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
@@ -184,27 +184,6 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
         }
     }
 
-    private void confirmDeletion() {
-        DialogFragment fragment = AlertDialogFragmentTwoChoices.newInstance(this,
-                getString(R.string.delete_scores),
-                getString(R.string.delete_scores_confirmation),
-                getString(R.string.no),
-                getString(R.string.yes));
-        fragment.setCancelable(false);
-        fragment.show(getFragmentManager(), "rightDialog");
-    }
-
-    @Override
-    public void doPositiveClick() {
-        daoScores.deleteDB(this);
-        adapterLocal.updateAdapter();
-    }
-
-    @Override
-    public void doNegativeClick() {
-
-    }
-
     /**
      * A fragment that launches other parts of the demo application.
      */
@@ -247,12 +226,6 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {
             switch (item.getItemId()) {
-                /*case android.R.id.home:
-                    // This is called when the Home (Up) button is pressed in the action bar.
-                    // Create a simple intent that starts the hierarchical parent activity and
-                    // use NavUtils in the Support Package to ensure proper handling of Up.
-                    NavUtils.navigateUpFromSameTask(this);
-                    return true;*/
                 case R.id.action_scores:
                     DialogFragment fragment = AlertDialogFragmentTwoChoices.newInstance(this,
                             getActivity().getString(R.string.delete_scores),
@@ -286,17 +259,23 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
         public friendsScores() {
         }
 
+        private HighScoreList scoreList = new HighScoreList(Collections.<Score>emptyList());
+
         public boolean isConnected() {
             ConnectivityManager manager = (ConnectivityManager) getActivity().getSystemService(CONNECTIVITY_SERVICE);
             NetworkInfo info = manager.getActiveNetworkInfo();
             return ((info != null) && (info.isConnected()));
         }
 
-        private class GetFriendsAndScores extends AsyncTask<Void, Void, HighScoreList> {
+        private class GetFriendsAndScores extends AsyncTask<Void, Void, Void> {
 
             @Override
-            protected HighScoreList doInBackground(Void... params) {
-                HighScoreList scores = null;
+            protected void onPreExecute() {
+                getActivity().setProgressBarIndeterminateVisibility(true);
+            }
+
+            @Override
+            protected Void doInBackground(Void... params) {
                 try {
                     ArrayList<NameValuePair> list = new ArrayList<NameValuePair>();
                     list.add(new BasicNameValuePair("name", PreferenceManager.getDefaultSharedPreferences(getActivity()).
@@ -313,42 +292,44 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
                 /* This was just for GET/DELETE operations */
 
                     Gson gson = new Gson();
-                    scores = gson.fromJson(reader, HighScoreList.class);
+                    scoreList = gson.fromJson(reader, HighScoreList.class);
                     reader.close();
 
                     connection.disconnect();
 
                 } catch (MalformedURLException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-                return scores;
+                return null;
             }
+
+            @Override
+            protected void onPostExecute(Void result) {
+                getActivity().setProgressBarIndeterminateVisibility(false);
+                ScoresAdapter adapterFriends = new ScoresAdapter(getActivity(), scoreList.getScores());
+                setListAdapter(adapterFriends);
+            }
+        }
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            getActivity().setProgressBarIndeterminate(true);
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            HighScoreList scoreList = null;
             if (isConnected()) {
                 GetFriendsAndScores task = new GetFriendsAndScores();
-                try {
-                    scoreList=task.execute().get();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                }
+                task.execute();
             }
             else {
                 Toast.makeText(getActivity(), getResources().getString(R.string.not_connected),
                         Toast.LENGTH_SHORT).show();
             }
-            ScoresAdapter adapterFriends = new ScoresAdapter(getActivity(), scoreList.getScores());
-            setListAdapter(adapterFriends);
             return inflater.inflate(R.layout.list_score_friends, container, false);
         }
     }
