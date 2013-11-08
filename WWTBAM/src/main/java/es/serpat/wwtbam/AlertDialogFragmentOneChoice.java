@@ -37,9 +37,21 @@ public class AlertDialogFragmentOneChoice extends DialogFragment {
                         }
 
                     }).create();
+        else if (message.equals(getString(R.string.congratulations_message)))
+            return new AlertDialog.Builder(getActivity())
+                    .setIcon(android.R.drawable.btn_star_big_on)
+                    .setTitle(getString(R.string.congratulations))
+                    .setMessage(getString(R.string.congratulations_message))
+                    .setNeutralButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            getActivity().finish();
+                        }
+
+                    }).create();
         else if (message.equals(getString(R.string.audience_message)))
             return new AlertDialog.Builder(getActivity())
-                    .setIcon(android.R.drawable.ic_menu_call)
+                    .setIcon(android.R.drawable.ic_menu_myplaces)
                     .setTitle(getString(R.string.audience))
                     .setMessage(getString(R.string.audience_message) + " " + title + "\"")
                     .setNeutralButton(getString(R.string.ok), new DialogInterface.OnClickListener() {

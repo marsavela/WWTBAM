@@ -1,0 +1,75 @@
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="30dp"
+    android:gravity="center"
+    android:background="@android:color/background_light">
+
+    <!--<TextView
+        android:text="@string/app_name"
+        android:id="@+id/titleWWTBAM"
+        style="@style/textWWTBAM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />-->
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:src="@drawable/logo_wwtbam"
+        android:contentDescription="@string/logo" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.25"
+        android:orientation="horizontal"
+        android:gravity="bottom">
+
+        <Button
+            android:text="@string/low_play"
+            android:id="@+id/butPlay"
+            style="@style/buttonColor"
+            android:background="@drawable/btn_blue_glossy"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5" />
+
+        <Button
+            android:text="@string/low_settings"
+            android:id="@+id/butSettings"
+            style="@style/buttonColor"
+            android:background="@drawable/btn_blue_glossy"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.25"
+        android:orientation="horizontal">
+
+        <Button
+            android:text="@string/low_scores"
+            android:id="@+id/butScores"
+            style="@style/buttonColor"
+            android:background="@drawable/btn_blue_glossy"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5" />
+
+        <Button
+            android:text="@string/low_about"
+            android:id="@+id/butAbout"
+            style="@style/buttonColor"
+            android:background="@drawable/btn_blue_glossy"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5" />
+    </LinearLayout>
+
+</LinearLayout>

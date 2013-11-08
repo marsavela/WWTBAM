@@ -90,6 +90,7 @@ public class Game extends FragmentActivity {
     public void testAnswer(String answer) {
         if (answer.equals(questionList.get(actualQuestion).right)) {
             if (actualQuestion >= questionList.size() - 1) {
+                actualQuestion++;
                 setUnsavedGame();
                 saveScore(true);
                 activity.questionAnswered("win");
