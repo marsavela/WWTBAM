@@ -1,19 +1,13 @@
 package es.serpat.wwtbam;
 
 import android.app.Activity;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * Created by sergiu on 04/11/13.
@@ -36,7 +30,7 @@ public class ScoresAdapter extends BaseAdapter {
         TextView score = (TextView) rootView.findViewById(R.id.score_score);
 
         name.setText(list.get(position).getName());
-        score.setText(Integer.toString(list.get(position).getScore()));
+        score.setText(Integer.toString(list.get(position).getScoring()));
         return rootView;
     }
 

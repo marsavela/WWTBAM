@@ -6,7 +6,7 @@ package es.serpat.wwtbam;
 public class Score implements Comparable<Score> {
     private int id;
     private String name;
-    private int score;
+    private int scoring;
 
     public int getId() {
         return id;
@@ -24,19 +24,19 @@ public class Score implements Comparable<Score> {
         this.name = name;
     }
 
-    public int getScore() {
-        return score;
+    public int getScoring() {
+        return scoring;
     }
 
-    public void setScore(int score) {
-        this.score = score;
+    public void setScoring(int scoring) {
+        this.scoring = scoring;
     }
 
     @Override
     public int compareTo(Score score) {
-        if (this.score > score.score)
+        if (this.scoring > score.scoring)
             return -1;
-        else if (this.score < score.score)
+        else if (this.scoring < score.scoring)
             return 1;
         else return 0;
     }

@@ -59,7 +59,7 @@ public class DAOScores {
                 + " = " + id, null);
     }
 
-    public List<Score> getAllScores() {
+    public HighScoreList getAllScores() {
         List<Score> scoreList = new ArrayList<Score>();
 
         Cursor cursor = database.query(SQLHelper.TABLE_SCORES,
@@ -74,14 +74,15 @@ public class DAOScores {
         // make sure to close the cursor
         cursor.close();
         Log.v("PRUEBAAAAA", Integer.toString(scoreList.size()));
-        return scoreList;
+        HighScoreList scoreLis = new HighScoreList(scoreList);
+        return scoreLis;
     }
 
     private Score cursorToScore(Cursor cursor) {
         Score score = new Score();
         score.setId(cursor.getInt(0));
         score.setName(cursor.getString(1));
-        score.setScore(cursor.getInt(2));
+        score.setScoring(cursor.getInt(2));
         return score;
     }
 

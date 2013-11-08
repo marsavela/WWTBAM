@@ -3,13 +3,19 @@ package es.serpat.wwtbam;
 import android.app.ActionBar;
 import android.app.DialogFragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,10 +23,33 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by SergiuDaniel on 13/10/13.
@@ -42,7 +71,7 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
     ViewPager mViewPager;
 
     private static DAOScores daoScores;
-    private static ScoresAdapter adapter;
+    private static ScoresAdapter adapterLocal;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,9 +124,9 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
 
     }
 
-    private void deleteDB() {
+    /*private static void deleteDB() {
         daoScores.deleteDB(super.getBaseContext());
-    }
+    }*/
 
     @Override
     public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
@@ -111,27 +140,6 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
 
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-    }
-
-    private void confirmDeletion() {
-        DialogFragment fragment = AlertDialogFragmentTwoChoices.newInstance(this,
-                getString(R.string.delete_scores),
-                getString(R.string.delete_scores_confirmation),
-                getString(R.string.no),
-                getString(R.string.yes));
-        fragment.setCancelable(false);
-        fragment.show(getFragmentManager(), "rightDialog");
-    }
-
-    @Override
-    public void doPositiveClick() {
-        deleteDB();
-        adapter.updateAdapter();
-    }
-
-    @Override
-    public void doNegativeClick() {
-
     }
 
     /**
@@ -176,10 +184,31 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
         }
     }
 
+    private void confirmDeletion() {
+        DialogFragment fragment = AlertDialogFragmentTwoChoices.newInstance(this,
+                getString(R.string.delete_scores),
+                getString(R.string.delete_scores_confirmation),
+                getString(R.string.no),
+                getString(R.string.yes));
+        fragment.setCancelable(false);
+        fragment.show(getFragmentManager(), "rightDialog");
+    }
+
+    @Override
+    public void doPositiveClick() {
+        daoScores.deleteDB(this);
+        adapterLocal.updateAdapter();
+    }
+
+    @Override
+    public void doNegativeClick() {
+
+    }
+
     /**
      * A fragment that launches other parts of the demo application.
      */
-    public class localScores extends ListFragment {
+    public static class localScores extends ListFragment implements OnClickAlertDialogFragmentTwoChoices {
 
         public localScores() {
         }
@@ -195,10 +224,10 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
                                  Bundle savedInstanceState) {
             daoScores = new DAOScores(super.getActivity());
             daoScores.open();
-            List<Score> scores = daoScores.getAllScores();
-            Collections.sort(scores);
-            adapter = new ScoresAdapter(getActivity(),scores);
-            setListAdapter(adapter);
+            HighScoreList scores = daoScores.getAllScores();
+            Collections.sort(scores.getScores());
+            adapterLocal = new ScoresAdapter(getActivity(),scores.getScores());
+            setListAdapter(adapterLocal);
             return inflater.inflate(R.layout.list_scores, container, false);
         }
 
@@ -225,24 +254,101 @@ public class ScoresActivity extends FragmentActivity implements ActionBar.TabLis
                     NavUtils.navigateUpFromSameTask(this);
                     return true;*/
                 case R.id.action_scores:
-                    confirmDeletion();
+                    DialogFragment fragment = AlertDialogFragmentTwoChoices.newInstance(this,
+                            getActivity().getString(R.string.delete_scores),
+                            getActivity().getString(R.string.delete_scores_confirmation),
+                            getActivity().getString(R.string.no),
+                            getActivity().getString(R.string.yes));
+                    fragment.setCancelable(false);
+                    fragment.show(getActivity().getFragmentManager(), "rightDialog");
                     return true;
             }
             return super.onOptionsItemSelected(item);
+        }
+
+        @Override
+        public void doPositiveClick() {
+            daoScores.deleteDB(getActivity());
+            adapterLocal.updateAdapter();
+        }
+
+        @Override
+        public void doNegativeClick() {
+
         }
     }
 
     /**
      * A fragment that launches other parts of the demo application.
      */
-    public static class friendsScores extends Fragment {
+    public static class friendsScores extends ListFragment {
 
         public friendsScores() {
+        }
+
+        public boolean isConnected() {
+            ConnectivityManager manager = (ConnectivityManager) getActivity().getSystemService(CONNECTIVITY_SERVICE);
+            NetworkInfo info = manager.getActiveNetworkInfo();
+            return ((info != null) && (info.isConnected()));
+        }
+
+        private class GetFriendsAndScores extends AsyncTask<Void, Void, HighScoreList> {
+
+            @Override
+            protected HighScoreList doInBackground(Void... params) {
+                HighScoreList scores = null;
+                try {
+                    ArrayList<NameValuePair> list = new ArrayList<NameValuePair>();
+                    list.add(new BasicNameValuePair("name", PreferenceManager.getDefaultSharedPreferences(getActivity()).
+                            getString(getActivity().getResources().getString(R.string.SHARED_PREF_NAME_KEY),
+                                    getActivity().getResources().getString(R.string.default_user_name))));
+
+				/* This is just for GET/DELETE operation */
+                    URL url = new URL("http://wwtbamandroid.appspot.com/rest/highscores?" +
+                            URLEncodedUtils.format(list, "UTF-8"));
+
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.setRequestMethod("GET");
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                /* This was just for GET/DELETE operations */
+
+                    Gson gson = new Gson();
+                    scores = gson.fromJson(reader, HighScoreList.class);
+                    reader.close();
+
+                    connection.disconnect();
+
+                } catch (MalformedURLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                return scores;
+            }
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+            HighScoreList scoreList = null;
+            if (isConnected()) {
+                GetFriendsAndScores task = new GetFriendsAndScores();
+                try {
+                    scoreList=task.execute().get();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                Toast.makeText(getActivity(), getResources().getString(R.string.not_connected),
+                        Toast.LENGTH_SHORT).show();
+            }
+            ScoresAdapter adapterFriends = new ScoresAdapter(getActivity(), scoreList.getScores());
+            setListAdapter(adapterFriends);
             return inflater.inflate(R.layout.list_score_friends, container, false);
         }
     }

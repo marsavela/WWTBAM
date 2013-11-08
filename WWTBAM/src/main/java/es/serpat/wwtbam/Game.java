@@ -91,7 +91,7 @@ public class Game extends FragmentActivity {
         if (answer.equals(questionList.get(actualQuestion).right)) {
             if (actualQuestion >= questionList.size() - 1) {
                 setUnsavedGame();
-                saveScore();
+                saveScore(true);
                 activity.questionAnswered("win");
             } else {
                 actualQuestion++;
@@ -99,19 +99,20 @@ public class Game extends FragmentActivity {
             }
         } else {
             setUnsavedGame();
-            saveScore();
+            saveScore(false);
             activity.questionAnswered("wrong");
         }
     }
 
-    public void saveScore() {
+    public void saveScore(boolean giveUp) {
         int score;
-        if (PreferenceManager.getDefaultSharedPreferences(activity).getBoolean(
-                activity.getResources().getString(R.string.SHARED_PREF_GAME), false))
+        if (giveUp)
             score = listLevels[actualQuestion];
         else if (actualQuestion > 10)
             score = listLevels[10];
-        else score = listLevels[5];
+        else if (actualQuestion > 5)
+            score = listLevels[5];
+        else score = 0;
 
         DAOScores daoScores = new DAOScores(activity);
         daoScores.open();

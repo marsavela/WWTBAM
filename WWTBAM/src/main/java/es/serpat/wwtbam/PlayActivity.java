@@ -82,7 +82,7 @@ public class PlayActivity extends Activity implements OnClickAlertDialogFragment
                 }
                 return true;
             case R.id.action_play_end_game:
-                game.saveScore();
+                game.saveScore(true);
                 game.setUnsavedGame();
                 finish();
             default:
@@ -334,7 +334,7 @@ public class PlayActivity extends Activity implements OnClickAlertDialogFragment
 
     @Override
     public void doNegativeClick() {
-        game.saveScore();
+        game.saveScore(true);
         game.setUnsavedGame();
         finish();
     }
