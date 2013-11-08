@@ -21,7 +21,7 @@
         android:textSize="40dp" />
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <TextView
@@ -39,12 +39,13 @@
             android:id="@+id/butA"
             style="@style/buttonColor"
             android:background="@drawable/btn_red_matte"
-            android:layout_width="fill_parent"
-            android:layout_height="80dp" />
+            android:layout_width="750dp"
+            android:layout_height="75dp"
+            android:textSize="30dp" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <TextView
@@ -62,13 +63,13 @@
             android:id="@+id/butB"
             style="@style/buttonColor"
             android:background="@drawable/btn_blue_matte"
-            android:layout_width="fill_parent"
-            android:layout_height="80dp" />
+            android:layout_width="750dp"
+            android:layout_height="75dp" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <TextView
@@ -86,13 +87,13 @@
             android:id="@+id/butC"
             style="@style/buttonColor"
             android:background="@drawable/btn_orange_matte"
-            android:layout_width="fill_parent"
-            android:layout_height="80dp" />
+            android:layout_width="750dp"
+            android:layout_height="75dp" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <TextView
@@ -110,8 +111,8 @@
             android:id="@+id/butD"
             style="@style/buttonColor"
             android:background="@drawable/btn_green_matte"
-            android:layout_width="fill_parent"
-            android:layout_height="80dp" />
+            android:layout_width="750dp"
+            android:layout_height="75dp" />
 
     </LinearLayout>
 

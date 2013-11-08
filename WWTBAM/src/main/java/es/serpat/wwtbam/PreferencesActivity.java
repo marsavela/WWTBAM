@@ -33,7 +33,7 @@ public class PreferencesActivity extends PreferenceActivity implements OnSharedP
                     getString(R.string.attention), getString(R.string.start_new_game_message));
             fragment.show(getFragmentManager(), "attentionDialog");
         }
-        Toast.makeText(this, PreferenceManager.getDefaultSharedPreferences(this).
+        Toast.makeText(this, "Current Player: "+PreferenceManager.getDefaultSharedPreferences(this).
                 getString(this.getResources().getString(R.string.SHARED_PREF_NAME_KEY),
                         this.getResources().getString(R.string.default_user_name)), Toast.LENGTH_LONG).show();
     }
