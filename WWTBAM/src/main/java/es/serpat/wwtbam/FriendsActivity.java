@@ -10,9 +10,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -48,8 +50,9 @@ public class FriendsActivity extends ListActivity  {
     ArrayAdapter<String> adapter;
 
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
+        super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.friends);
 
         // We save the Players name. We'll need it later
@@ -144,6 +147,8 @@ public class FriendsActivity extends ListActivity  {
         @Override
         protected void onPreExecute() {
             // TODO Auto-generated method stub
+
+            setProgressBarIndeterminateVisibility(true);
         }
 
         @Override
@@ -163,7 +168,7 @@ public class FriendsActivity extends ListActivity  {
                 writer.write(URLEncodedUtils.format(pairs, "UTF-8"));
                 writer.close();
 
-     //esto sobra??           BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                connection.getInputStream();
             } catch (MalformedURLException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -180,10 +185,17 @@ public class FriendsActivity extends ListActivity  {
 
             GetFriendsTask task = new GetFriendsTask();
             task.execute();
+            setProgressBarIndeterminateVisibility(false);
         }
     }
 
     private class GetFriendsTask extends AsyncTask<Void, Integer, Boolean> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            setProgressBarIndeterminateVisibility(true);
+        }
 
         @Override
         protected Boolean doInBackground(Void... params) {
@@ -209,7 +221,6 @@ public class FriendsActivity extends ListActivity  {
                     e.printStackTrace();
                 }
 
-
             return true;
         }
 
@@ -222,6 +233,7 @@ public class FriendsActivity extends ListActivity  {
             final ArrayAdapter<String> adapter = new ArrayAdapter<String>(FriendsActivity.this,
                     android.R.layout.simple_list_item_1, values);
             setListAdapter(adapter);
+            setProgressBarIndeterminateVisibility(false);
         }
     }
 
