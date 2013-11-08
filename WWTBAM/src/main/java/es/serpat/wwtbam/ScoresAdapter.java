@@ -50,44 +50,4 @@ public class ScoresAdapter extends BaseAdapter {
         list.clear();
         notifyDataSetChanged();
     }
-
-    /*private List<Score> scores;
-    private Context context;
-
-    public ScoresAdapter(Context context, List<Score> scores) {
-        super();
-        this.context = context;
-        this.scores = scores;
-    }
-
-    @Override
-    public int getCount() {
-        return scores.size();
-    }
-
-    @Override
-    public Object getItem(int i) {
-        return scores.get(i);
-    }
-
-    @Override
-    public long getItemId(int i) {
-        return i;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        //return super.getView(position, convertView, parent);
-
-        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rootView = inflater.inflate(R.layout.score_row, null,true);
-        TextView name = (TextView) rootView.findViewById(R.id.score_name);
-        TextView score = (TextView) rootView.findViewById(R.id.score_score);
-
-        name.setText(scores.get(position).getName());
-        score.setText(scores.get(position).getScore());
-
-        return rootView;
-
-    }*/
 }
