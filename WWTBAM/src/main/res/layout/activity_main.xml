@@ -4,7 +4,6 @@
     android:layout_height="fill_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:padding="30dp"
-    android:gravity="center"
     android:background="@android:color/background_light">
 
     <!--<TextView
@@ -20,7 +19,8 @@
         android:id="@+id/imageView"
         android:layout_gravity="center"
         android:src="@drawable/logo_wwtbam"
-        android:paddingBottom="@dimen/activity_vertical_margin" />
+        android:layout_weight="0.3"
+        android:contentDescription="@string/logo" />
 
     <Button
         android:text="@string/low_play"
@@ -28,7 +28,8 @@
         style="@style/buttonColor"
         android:background="@drawable/btn_blue_glossy"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_weight="0.175" />
 
     <Button
         android:text="@string/low_settings"
@@ -36,7 +37,8 @@
         style="@style/buttonColor"
         android:background="@drawable/btn_blue_glossy"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_weight="0.175" />
 
     <Button
         android:text="@string/low_scores"
@@ -44,7 +46,8 @@
         style="@style/buttonColor"
         android:background="@drawable/btn_blue_glossy"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_weight="0.175" />
 
     <Button
         android:text="@string/low_about"
@@ -52,6 +55,7 @@
         style="@style/buttonColor"
         android:background="@drawable/btn_blue_glossy"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_weight="0.175" />
 
 </LinearLayout>
