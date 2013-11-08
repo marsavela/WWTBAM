@@ -53,5 +53,8 @@
     <string name="start_new_game_message">Estás en medio de una partida. Si cambias ahora las preferencias, perderás la puta partida.</string>
     <string name="not_connected">El dispositivo no está conectado a Internet.</string>
     <string name="current_player">Jugador Actual: </string>
+    <string name="added">added to your friends!</string>
+    <string name="cancel">CANCEL</string>
+    <string name="insert_friend">Enter your friend\'s name</string>
 
 </resources>

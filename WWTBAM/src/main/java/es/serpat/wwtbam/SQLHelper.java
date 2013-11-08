@@ -14,7 +14,6 @@ public class SQLHelper extends SQLiteOpenHelper {
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_SCORE = "score";
-    public static final String COLUMN_COMMENT = "comment";
 
     private static final String DATABASE_NAME = "score.db";
     private static final int DATABASE_VERSION = 1;

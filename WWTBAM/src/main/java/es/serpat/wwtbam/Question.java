@@ -17,8 +17,6 @@ public class Question {
     String fifty1 = null;
     String fifty2 = null;
 
-    public Question() {
-    }
 
     public Question(String number, String text, String answer1, String answer2, String answer3, String answer4, String right, String audience, String phone, String fifty1, String fifty2) {
         this.number = number;

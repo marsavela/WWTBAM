@@ -18,7 +18,7 @@
         android:id="@+id/question"
         android:gravity="center"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:textSize="40dp" />
+        android:textSize="40sp" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -40,7 +40,7 @@
             style="@style/buttonColor"
             android:background="@drawable/btn_red_matte"
             android:layout_width="fill_parent"
-            android:layout_height="80dp" />
+            android:layout_height="80sp" />
     </LinearLayout>
 
     <LinearLayout

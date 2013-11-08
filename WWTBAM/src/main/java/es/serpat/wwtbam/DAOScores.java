@@ -74,8 +74,7 @@ public class DAOScores {
         // make sure to close the cursor
         cursor.close();
         Log.v("PRUEBAAAAA", Integer.toString(scoreList.size()));
-        HighScoreList scoreLis = new HighScoreList(scoreList);
-        return scoreLis;
+        return new HighScoreList(scoreList);
     }
 
     private Score cursorToScore(Cursor cursor) {

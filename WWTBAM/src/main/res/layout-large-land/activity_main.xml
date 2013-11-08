@@ -21,7 +21,8 @@
         android:layout_gravity="center"
         android:src="@drawable/logo_wwtbam"
         android:paddingBottom="@dimen/activity_vertical_margin"
-        android:layout_weight="0.5" />
+        android:layout_weight="0.5"
+        android:contentDescription="@string/logo" />
 
     <TableLayout
         android:layout_width="wrap_content"
@@ -49,7 +50,7 @@
                 android:layout_column="0"
                 android:layout_weight="0.5"
                 android:textStyle="bold"
-                android:textSize="50dp" />
+                android:textSize="50sp" />
 
             <Button
                 android:text="@string/low_settings"
@@ -60,7 +61,7 @@
                 android:layout_height="80dp"
                 android:layout_column="1"
                 android:layout_weight="0.5"
-                android:textSize="50dp"
+                android:textSize="50sp"
                 android:textStyle="bold" />
 
         </TableRow>
@@ -79,7 +80,7 @@
                 android:layout_height="80dp"
                 android:layout_column="0"
                 android:layout_weight="0.5"
-                android:textSize="50dp"
+                android:textSize="50sp"
                 android:textStyle="bold" />
 
             <Button
@@ -91,7 +92,7 @@
                 android:layout_height="80dp"
                 android:layout_column="1"
                 android:layout_weight="0.5"
-                android:textSize="50dp"
+                android:textSize="50sp"
                 android:textStyle="bold" />
         </TableRow>
     </TableLayout>

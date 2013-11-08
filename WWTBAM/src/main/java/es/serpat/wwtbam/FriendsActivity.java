@@ -43,10 +43,9 @@ import java.util.List;
  */
 public class FriendsActivity extends ListActivity  {
 
-    final Context context = this;
+    private final Context context = this;
     private String friend_name;
     private String name;
-    private FriendList friends;
     private String[] values=new String[]{};
     ArrayAdapter<String> adapter;
 
@@ -106,17 +105,17 @@ public class FriendsActivity extends ListActivity  {
         // New dialog to enter the name of our new friend
         AlertDialog.Builder alert = new AlertDialog.Builder(context);
         alert.setTitle(R.string.action_addFriend); //Set Alert dialog title here
-        alert.setMessage("Enter Your Friends Name Here"); //Message here
+        alert.setMessage(getResources().getText(R.string.insert_friend)); //Message here
 
         // Set an EditText view to get user input
         final EditText input = new EditText(context);
         alert.setView(input);
 
         // Listener for the "OK" button. If pressed, we save the name of our friend, and post it.
-        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        alert.setPositiveButton(getResources().getText(R.string.ok), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 friend_name = input.getEditableText().toString();
-                Toast.makeText(context, friend_name + " added to your friends!", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, friend_name + getResources().getText(R.string.added), Toast.LENGTH_LONG).show();
                 if (isConnected()) {
                     PostFriendTask task = new PostFriendTask();
                     task.execute();
@@ -127,7 +126,7 @@ public class FriendsActivity extends ListActivity  {
 
             }
         }); //End of alert.setPositiveButton
-        alert.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton(getResources().getText(R.string.cancel), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 // Canceled.
                 dialog.cancel();
@@ -205,7 +204,7 @@ public class FriendsActivity extends ListActivity  {
                     BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
                     Gson gson = new Gson();
-                    friends = gson.fromJson(reader, FriendList.class);
+                    FriendList friends = gson.fromJson(reader, FriendList.class);
                     reader.close();
 
                     values = friends.getFriends().toArray(new String[friends.getFriends().size()]);

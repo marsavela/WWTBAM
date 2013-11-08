@@ -18,97 +18,105 @@
         android:id="@+id/question"
         android:gravity="center"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:textSize="25dp" />
+        android:textSize="25sp"
+        android:layout_weight="0.3" />
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="0.6">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="A : "
-            android:id="@+id/textA"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin" />
-
-        <Button
-            android:text="@string/low_play"
-            android:id="@+id/butA"
-            style="@style/buttonColor"
-            android:background="@drawable/btn_red_matte"
+        <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
+            android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="A : "
+                android:id="@+id/textA"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="B : "
-            android:id="@+id/textB"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin" />
+            <Button
+                android:text="@string/low_play"
+                android:id="@+id/butA"
+                style="@style/buttonColor"
+                android:background="@drawable/btn_red_matte"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
 
-        <Button
-            android:text="@string/low_settings"
-            android:id="@+id/butB"
-            style="@style/buttonColor"
-            android:background="@drawable/btn_blue_matte"
+        <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="B : "
+                android:id="@+id/textB"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin" />
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+            <Button
+                android:text="@string/low_settings"
+                android:id="@+id/butB"
+                style="@style/buttonColor"
+                android:background="@drawable/btn_blue_matte"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="C : "
-            android:id="@+id/textC"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin" />
+        </LinearLayout>
 
-        <Button
-            android:text="@string/low_scores"
-            android:id="@+id/butC"
-            style="@style/buttonColor"
-            android:background="@drawable/btn_orange_matte"
+        <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="C : "
+                android:id="@+id/textC"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin" />
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+            <Button
+                android:text="@string/low_scores"
+                android:id="@+id/butC"
+                style="@style/buttonColor"
+                android:background="@drawable/btn_orange_matte"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="D : "
-            android:id="@+id/textD"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin" />
+        </LinearLayout>
 
-        <Button
-            android:text="@string/low_about"
-            android:id="@+id/butD"
-            style="@style/buttonColor"
-            android:background="@drawable/btn_green_matte"
+        <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="D : "
+                android:id="@+id/textD"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin" />
+
+            <Button
+                android:text="@string/low_about"
+                android:id="@+id/butD"
+                style="@style/buttonColor"
+                android:background="@drawable/btn_green_matte"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

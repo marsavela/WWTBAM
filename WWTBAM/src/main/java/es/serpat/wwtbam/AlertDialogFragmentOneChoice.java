@@ -42,7 +42,7 @@ public class AlertDialogFragmentOneChoice extends DialogFragment {
                     .setIcon(android.R.drawable.btn_star_big_on)
                     .setTitle(getString(R.string.congratulations))
                     .setMessage(getString(R.string.congratulations_message))
-                    .setNeutralButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    .setNeutralButton(getString(R.string.finish), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             getActivity().finish();
