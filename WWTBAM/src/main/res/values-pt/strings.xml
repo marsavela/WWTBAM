@@ -1,0 +1,57 @@
+<resources>
+
+    <string name="about">CREDITOS</string>
+    <string name="about_text">Esta aplicação foi criada para adm por Sergiu Daniel Marsavela e Patrick Mondria</string>
+    <string name="action_addFriend">Adicionar amigo</string>
+    <string name="action_delScores">Apagar</string>
+    <string name="action_end_game">TERMINAR O JOGO</string>
+    <string name="action_help">CURINGA</string>
+    <string name="ad_new_game">Lembre-se que vai começar um novo jogo na próxima vez</string>
+    <string name="app_name">QQSM</string>
+    <string name="attention">Atençao</string>
+    <string name="audience">Audiência</string>
+    <string name="audience_message">O público acredita que a resposta correta é</string>
+    <string name="congratulations">Parabéns</string>
+    <string name="congratulations_message">Agora você é um milionário. Aproveite</string>
+    <string name="default_user_name">Jogador Desconhecido</string>
+    <string name="delete_scores">Eliminar as pontuações</string>
+    <string name="delete_scores_confirmation">certeza de que pretende eliminar as pontuaçôes?</string>
+    <string name="fifty">50 %</string>
+    <string name="finish">FINALIZAR</string>
+    <string name="friends">AMIGOS</string>
+    <string name="give_up">Renunciar</string>
+    <string name="local">LOCAL</string>
+    <string name="low_about">Creditos</string>
+    <string name="low_play">Jogar</string>
+    <string name="low_scores">Puntuaçôes</string>
+    <string name="low_settings">Opções</string>
+    <string name="main">MAIN</string>
+    <string name="next">Seguinte</string>
+    <string name="no">nâo</string>
+    <string name="not_connected">O dispositivo nâo está ligado à Internet.</string>
+    <string name="ok">OK</string>
+    <string name="phone">Telefone</string>
+    <string name="phone_message">Tenho certeza de que a resposta correta é</string>
+    <string name="pick_joker">Escolhe un joker</string>
+    <string name="play">JOGAR</string>
+    <string name="pref_friends_summary">Adicionae amigos para ver sua pontuação</string>
+    <string name="pref_friends_title">Adicionar amigo</string>
+    <string name="pref_help_summary">Escolhe quantas vezes você pode obter ajuda</string>
+    <string name="pref_name_summary">Introduz o teu nome</string>
+    <string name="pref_name_title">Nome</string>
+    <string name="pref_title_help">Numero de ajudas</string>
+    <string name="right">BEM FEITO</string>
+    <string name="right_message">Concentrese. Continua. O que você quer fazer?</string>
+    <string name="scores">PUNTUAÇÔES</string>
+    <string name="settings">OPÇÔES</string>
+    <string name="sorry">SENTIMOS</string>
+    <string name="sorry_message">Sentimos, mas nâo tem mais jokers</string>
+    <string name="start_new_game_message">Você já está jogando um jogo. Se você vai alterar a configuração você vai perder o jogo.</string>
+    <string name="try_again">Tente de novo. Sabemos que pode.</string>
+    <string name="understood">ENTENDIDO</string>
+    <string name="users">TODOS OS USUARIOS</string>
+    <string name="yes">SIM</string>
+    <string name="you_lost">Perdeu</string>
+    <string name="current_player">Jogador Actual: </string>
+
+</resources>

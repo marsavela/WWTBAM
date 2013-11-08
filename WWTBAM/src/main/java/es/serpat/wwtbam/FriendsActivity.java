@@ -34,6 +34,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -46,24 +47,19 @@ public class FriendsActivity extends ListActivity  {
     private String friend_name;
     private String name;
     private FriendList friends;
-    private String[] values =new String[]{" "};
+    private String[] values=new String[]{};
     ArrayAdapter<String> adapter;
 
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        setContentView(R.layout.friends);
+        setContentView(R.layout.list_friends);
 
         // We save the Players name. We'll need it later
         name=PreferenceManager.getDefaultSharedPreferences(context).
                 getString(context.getResources().getString(R.string.SHARED_PREF_NAME_KEY),
                         context.getResources().getString(R.string.default_user_name));
-
-        // The adapter fills the layout with the values (names of our friends)
-        this.adapter = new ArrayAdapter<String>(FriendsActivity.this,
-                android.R.layout.simple_list_item_1, values);
-        setListAdapter(this.adapter);
 
         // If the devices is connected to the Internet we get our friend's names
         if (isConnected()) {
@@ -71,7 +67,7 @@ public class FriendsActivity extends ListActivity  {
             task.execute();
         }
         else {
-            Toast.makeText(getParent(), getResources().getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -93,6 +89,7 @@ public class FriendsActivity extends ListActivity  {
                 NavUtils.navigateUpFromSameTask(this);
                 return true;
             case R.id.add_new_friend:
+
                 add_new_friend();
                 return true;
         }

@@ -66,5 +66,6 @@
     <string name="not_connected">The device is not connected to the Internet.</string>
     <string name="logo">Logo</string>
     <string name="empty_face">Empty face</string>
+    <string name="current_player">Current Player: </string>
 
 </resources>
