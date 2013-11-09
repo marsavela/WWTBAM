@@ -39,7 +39,7 @@
     <string name="pref_name_title">Nombre</string>
     <string name="pref_title_help">Número de ayudas</string>
     <string name="right">BIEN HECHO</string>
-    <string name="right_message">Concéntrese. Siga adelante. Qué quiere hacer?</string>
+    <string name="right_message">Concéntrese. Siga adelante. ¿Qué quiere hacer?</string>
     <string name="scores">PUNTUACIONES</string>
     <string name="settings">OPCIONES</string>
     <string name="sorry">SE SIENTE</string>
@@ -52,9 +52,9 @@
     <string name="attention">Atención</string>
     <string name="start_new_game_message">Estás en medio de una partida. Si cambias ahora las preferencias, perderás la puta partida.</string>
     <string name="not_connected">El dispositivo no está conectado a Internet.</string>
-    <string name="current_player">Jugador Actual: </string>
-    <string name="added">added to your friends!</string>
-    <string name="cancel">CANCEL</string>
-    <string name="insert_friend">Enter your friend\'s name</string>
+    <string name="current_player">Jugador Actual:\u0020</string>
+    <string name="added">\u0020ha sido añadido a tus amigos!</string>
+    <string name="cancel">CANCELAR</string>
+    <string name="insert_friend">Escribe el nombre de tu amigo</string>
 
 </resources>

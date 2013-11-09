@@ -38,7 +38,8 @@
                 android:text="A : "
                 android:id="@+id/textA"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin" />
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_gravity="center_vertical" />
 
             <Button
                 android:text="@string/low_play"
@@ -60,7 +61,8 @@
                 android:text="B : "
                 android:id="@+id/textB"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin" />
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_gravity="center_vertical" />
 
             <Button
                 android:text="@string/low_settings"
@@ -83,7 +85,8 @@
                 android:text="C : "
                 android:id="@+id/textC"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin" />
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_gravity="center_vertical" />
 
             <Button
                 android:text="@string/low_scores"
@@ -106,7 +109,8 @@
                 android:text="D : "
                 android:id="@+id/textD"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin" />
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_gravity="center_vertical" />
 
             <Button
                 android:text="@string/low_about"

@@ -52,9 +52,9 @@
     <string name="users">TODOS OS USUARIOS</string>
     <string name="yes">SIM</string>
     <string name="you_lost">Perdeu</string>
-    <string name="current_player">Jogador Actual: </string>
-    <string name="added">added to your friends!</string>
-    <string name="cancel">CANCEL</string>
+    <string name="current_player">Jogador Actual:\u0020</string>
+    <string name="added">\u0020added to your friends!</string>
+    <string name="cancel">CANCELAR</string>
     <string name="insert_friend">Enter your friend\'s name</string>
 
 </resources>

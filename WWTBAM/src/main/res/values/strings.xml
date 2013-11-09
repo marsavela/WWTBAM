@@ -64,8 +64,8 @@
     <string name="not_connected">The device is not connected to the Internet.</string>
     <string name="logo">Logo</string>
     <string name="empty_face">Empty face</string>
-    <string name="current_player">Current Player: </string>
-    <string name="added">added to your friends!</string>
+    <string name="current_player">Current Player:\u0020</string>
+    <string name="added">\u0020added to your friends!</string>
     <string name="cancel">CANCEL</string>
     <string name="insert_friend">Enter your friend\'s name</string>
 
