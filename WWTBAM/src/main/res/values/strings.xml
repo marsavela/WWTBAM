@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+
+    <!-- APP -->
     <string name="app_name">WWTBAM</string>
+    <string name="pref_file">es.serpat.wwtbam_preferences</string>
+
+
+    <!-- MAIN -->
+
     <string name="low_settings">Settings</string>
     <string name="low_play">Play</string>
     <string name="play">PLAY</string>
@@ -11,22 +18,10 @@
     <string name="about">CREDITS</string>
     <string name="low_about">Credits</string>
     <string name="main">MAIN</string>
-    <string name="about_text">This app was made for ADM by Sergiu Daniel Marsavela and Patrick Mondria Simoes.</string>
-    <string name="pref_title_help">Number of helps</string>
-    <string name="pref_help_summary">Select how many times you can ask for help.</string>
-    <string name="pref_name_summary">Introduce your name.</string>
-    <string name="pref_name_title">Name</string>
-    <string name="pref_friends_title">Add friend</string>
-    <string name="pref_friends_summary">Add friends to compare scores.</string>
-    <string name="friends">FRIENDS</string>
-    <string name="action_addFriend">ADD FRIEND</string>
-    <string name="users">ALL USERS</string>
-    <string name="local">LOCAL</string>
-    <string name="action_delScores">DELETE</string>
-    <string name="delete_scores_confirmation">Are you sure you want to delete the local scores?</string>
-    <string name="delete_scores">Delete scores</string>
-    <string name="no">No</string>
-    <string name="yes">Yes</string>
+
+
+    <!-- PLAY -->
+
     <string name="action_help">JOKERS</string>
     <string name="action_end_game">END GAME</string>
     <string name="pick_joker">Pick a joker</string>
@@ -47,7 +42,42 @@
     <string name="ok">OK</string>
     <string name="phone_message">I\'m pretty sure the right answer is the</string>
     <string name="audience_message">The audience thinks the right answer is the</string>
-    <string name="pref_file">es.serpat.wwtbam_preferences</string>
+
+
+    <!-- SETTING -->
+    <string name="pref_title_help">Number of helps</string>
+    <string name="pref_help_summary">Select how many times you can ask for help.</string>
+    <string name="pref_name_summary">Introduce your name.</string>
+    <string name="pref_name_title">Name</string>
+    <string name="pref_friends_title">Add friend</string>
+    <string name="pref_friends_summary">Add friends to compare scores.</string>
+    <string name="friends">FRIENDS</string>
+    <string name="action_addFriend">ADD FRIEND</string>
+
+    <string name="current_player">Current Player:\u0020</string>
+    <string name="added">\u0020added to your friends!</string>
+
+
+    <!-- SCORES -->
+
+    <string name="users">ALL USERS</string>
+    <string name="local">LOCAL</string>
+    <string name="action_delScores">DELETE</string>
+    <string name="delete_scores_confirmation">Are you sure you want to delete the local scores?</string>
+    <string name="delete_scores">Delete scores</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+
+
+    <!-- ABOUT -->
+    <string name="about_text">This app was made for ADM by Sergiu Daniel Marsavela and Patrick Mondria Simoes.</string>
+
+
+
+
+
+
+
     <string name="understood">UNDERSTOOD</string>
     <string name="finish">FINISH</string>
     <string name="SHARED_PREF_NAME_KEY">playerName</string>
@@ -64,8 +94,6 @@
     <string name="not_connected">The device is not connected to the Internet.</string>
     <string name="logo">Logo</string>
     <string name="empty_face">Empty face</string>
-    <string name="current_player">Current Player:\u0020</string>
-    <string name="added">\u0020added to your friends!</string>
     <string name="cancel">CANCEL</string>
     <string name="insert_friend">Enter your friend\'s name</string>
 
