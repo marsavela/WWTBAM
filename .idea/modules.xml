@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/WWTBAM/WWTBAM.iml" filepath="$PROJECT_DIR$/WWTBAM/WWTBAM.iml" />
+      <module fileurl="file://$PROJECT_DIR$/WWTBAM.iml" filepath="$PROJECT_DIR$/WWTBAM.iml" />
+      <module fileurl="file://$PROJECT_DIR$/WWTBAM/WWTBAM-WWTBAM.iml" filepath="$PROJECT_DIR$/WWTBAM/WWTBAM-WWTBAM.iml" />
       <module fileurl="file://$PROJECT_DIR$/WWTBAMProject.iml" filepath="$PROJECT_DIR$/WWTBAMProject.iml" />
     </modules>
   </component>
